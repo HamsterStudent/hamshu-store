@@ -1,5 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import Hamburger from "public/assets/icon/hamburger.png";
+import SerchIcon from "public/assets/icon/icon_search.png";
 
 const HeaderWrap = styled.section`
   width: 100%;
@@ -8,12 +11,34 @@ const HeaderWrap = styled.section`
   position: sticky;
   top: 0;
   z-index: 99;
+  font-size: 1rem;
+  font-family: "UhBeeSe_hyun";
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  .imgWrap {
+    width: 25px;
+    img {
+      width: 100%;
+      height: 100%;
+      position: relative !important;
+      object-fit: contain;
+    }
+  }
 `;
 
 export default function Header() {
   return (
     <HeaderWrap>
+      <div className="imgWrap">
+        <Image src={Hamburger} alt="hamburgermenu" />
+      </div>
       <Link href="/">HAMSHUVER</Link>
+      <div className="imgWrap">
+        <Image src={SerchIcon} alt="hamburgermenu" />
+      </div>
     </HeaderWrap>
   );
 }
