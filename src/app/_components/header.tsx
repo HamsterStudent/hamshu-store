@@ -3,6 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import Hamburger from "public/assets/icon/hamburger.png";
 import SerchIcon from "public/assets/icon/icon_search.png";
+import { useSelector } from "react-redux";
 
 const HeaderWrap = styled.section`
   width: 100%;
@@ -30,6 +31,7 @@ const HeaderWrap = styled.section`
 `;
 
 export default function Header() {
+  const { loading, cartItems } = useSelector((state) => state.cart);
   return (
     <HeaderWrap>
       <div className="imgWrap">
@@ -39,6 +41,8 @@ export default function Header() {
       <div className="imgWrap">
         <Image src={SerchIcon} alt="hamburgermenu" />
       </div>
+      <span>{loading ? "" : cartItems.reduce((a, c) => a + c.qty, 0)}</span>
+      <Link href="/cart">Cart</Link>
     </HeaderWrap>
   );
 }
