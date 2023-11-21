@@ -1,7 +1,17 @@
 import styled from "styled-components";
 
 export interface IProdData {
-  data: { name: string; img: string; price: number }[];
+  data: {
+    id: string;
+    name: string;
+    img: string;
+    price: number;
+    countInStock: number;
+    rating: number;
+    numReviews: number;
+    description: string;
+  }[];
+
   title?: string;
 }
 
