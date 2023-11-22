@@ -59,7 +59,7 @@ export default function Shipping() {
             autoFocus
             {...register("fullName", { required: "Please enter full name" })}
           />
-          {errors.fullName && <div>{errors.root?.message}</div>}
+          {errors.fullName && <div>{errors.fullName.message?.toString()}</div>}
         </div>
         <div>
           <label htmlFor="address">Address</label>
@@ -71,7 +71,7 @@ export default function Shipping() {
               minLength: { value: 3, message: "Address is more than 2 chars" },
             })}
           />
-          {errors.address && <div>{errors.root?.message}</div>}
+          {errors.address && <div>{errors.address.message?.toString()}</div>}
         </div>
         <div>
           <label htmlFor="city">city</label>
@@ -82,7 +82,7 @@ export default function Shipping() {
               required: "Please enter city",
             })}
           />
-          {errors.city && <div>{errors.root?.message}</div>}
+          {errors.city && <div>{errors.city.message?.toString()}</div>}
         </div>
         <div>
           <label htmlFor="postalCode">postalCode</label>
@@ -93,7 +93,9 @@ export default function Shipping() {
               required: "Please enter postalCode",
             })}
           />
-          {errors.postalCode && <div>{errors.root?.message}</div>}
+          {errors.postalCode && (
+            <div>{errors.postalCode.message?.toString()}</div>
+          )}
         </div>
         <div>
           <label htmlFor="country">country</label>
@@ -104,7 +106,7 @@ export default function Shipping() {
               required: "Please enter country",
             })}
           />
-          {errors.country && <div>{errors.root?.message}</div>}
+          {errors.country && <div>{errors.contry?.message?.toString()}</div>}
         </div>
         <div>
           <button>Next</button>
