@@ -52,7 +52,7 @@ export default function PlaceOrderScreen() {
             <h2>Payment Method</h2>
             <div>{paymentMethod}</div>
             <div>
-              <Link href="/shipping">Edit</Link>
+              <Link href="/payment">Edit</Link>
             </div>
           </div>
           <div>
@@ -75,7 +75,7 @@ export default function PlaceOrderScreen() {
                 </li>
               ))}
             </ul>
-            <Link href="cart">Edit</Link>
+            <Link href="/cart">Edit</Link>
           </div>
           <div>
             <h2>Order Summery</h2>
