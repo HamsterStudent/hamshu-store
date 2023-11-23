@@ -1,22 +1,78 @@
 "use client";
 import CheckoutWizard from "@/app/_components/checkoutWizard";
+import { RequestPayParams, RequestPayResponse } from "iamport-typings";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
+export interface IRootState {
+  cart: IInitialState;
+}
+
+interface IInitialState {
+  loading: boolean;
+  showSlidbar: boolean;
+  cartItems: ICartItem[];
+  shippingAddress: {
+    fullName: string;
+    address: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  };
+  paymentMethod: string;
+  itemsPrice: string;
+  shippingPrice: number;
+  totalPrice: string;
+  taxPrice?: string;
+}
+
+interface ICartItem {
+  countInStock: number;
+  description: string;
+  id: string;
+  img: string;
+  name: string;
+  numReviews: number;
+  price: number;
+  qty: number;
+  rating: number;
+  quantity: number;
+}
+[];
+
 export default function PlaceOrderScreen() {
-  const {
-    cartItems,
-    itemsPrice,
-    shippingPrice,
-    totalPrice,
-    taxPrice,
-    shippingAddress,
-    paymentMethod,
-    loading,
-  } = useSelector((state) => state.cart);
+  // 어글리패턴
+  // const {
+  //   cartItems,
+  //   itemsPrice,
+  //   shippingPrice,
+  //   totalPrice,
+  //   taxPrice,
+  //   shippingAddress,
+  //   paymentMethod,
+  //   loading,
+  // }: IInitialState = useSelector((state) => state.cart);
+
+  const cartItems: ICartItem[] = useSelector(
+    (state: IRootState) => state.cart.cartItems,
+  );
+  const itemsPrice = useSelector((state: IRootState) => state.cart.itemsPrice);
+  const shippingPrice = useSelector(
+    (state: IRootState) => state.cart.shippingPrice,
+  );
+  const totalPrice = useSelector((state: IRootState) => state.cart.totalPrice);
+  const taxPrice = useSelector((state: IRootState) => state.cart.taxPrice);
+  const shippingAddress = useSelector(
+    (state: IRootState) => state.cart.shippingAddress,
+  );
+  const paymentMethod = useSelector(
+    (state: IRootState) => state.cart.paymentMethod,
+  );
+  const loading = useSelector((state: IRootState) => state.cart.loading);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +80,39 @@ export default function PlaceOrderScreen() {
       router.push("/payment");
     }
   }, [paymentMethod, router]);
+
+  const requestPayment = () => {
+    if (!window.IMP) return;
+    const { IMP } = window;
+    IMP.init(`${process.env.IMP_UID}`);
+
+    const data: RequestPayParams = {
+      pg: "html5_inicis", // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
+      pay_method: "card", // 결제수단
+      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+      amount: +totalPrice, // 결제금액
+      name: `${cartItems[0].name} 외 ${cartItems.length}`, // 주문명
+      buyer_name: "홍길동", // 구매자 이름
+      buyer_tel: "01012341234", // 구매자 전화번호
+      buyer_email: "example@example.com", // 구매자 이메일
+      buyer_addr: `${shippingAddress.fullName}${shippingAddress.address}${shippingAddress.city}${shippingAddress.postalCode}${shippingAddress.country}`, // 구매자 주소
+      buyer_postcode: shippingAddress.postalCode, // 구매자 우편번호
+    };
+
+    /* 결제 창 호출 */
+    IMP.request_pay(data, callback);
+  };
+
+  /* 콜백 함수 정의 */
+  const callback = (response: RequestPayResponse) => {
+    const { success, error_msg } = response;
+
+    if (success) {
+      router.push("/orderresult");
+    } else {
+      alert(`결제 실패: ${error_msg}`);
+    }
+  };
 
   return (
     <div>
@@ -97,9 +186,7 @@ export default function PlaceOrderScreen() {
                 <p>${totalPrice}</p>
               </li>
               <li>
-                <button onClick={() => alert("Not implemented")}>
-                  Place Order
-                </button>
+                <button onClick={() => requestPayment()}>Place Order</button>
               </li>
             </ul>
           </div>
