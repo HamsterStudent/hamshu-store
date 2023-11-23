@@ -53,7 +53,7 @@ const cartSlice = createSlice({
       state.itemsPrice = addDecimals(
         state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0),
       );
-      state.shippingPrice = 3000;
+      state.shippingPrice = 100;
       // state.taxPrice = addDecimals(Number((0.15 * state.itemsPrice).toFixed(2)));
       state.totalPrice = addDecimals(
         Number(state.itemsPrice) + Number(state.shippingPrice),
@@ -67,7 +67,7 @@ const cartSlice = createSlice({
       state.itemsPrice = addDecimals(
         state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0),
       );
-      state.shippingPrice = 3000;
+      state.shippingPrice = 100;
       // state.taxPrice = addDecimals(Number((0.15 * state.itemsPrice).toFixed(2)));
       state.totalPrice = addDecimals(
         Number(state.itemsPrice) + Number(state.shippingPrice),
