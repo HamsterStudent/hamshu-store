@@ -1,47 +1,12 @@
 "use client";
 import CheckoutWizard from "@/app/_components/checkoutWizard";
+import { ICartItem, IRootState } from "@/app/_types/cartType";
 import { RequestPayParams, RequestPayResponse } from "iamport-typings";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-
-export interface IRootState {
-  cart: IInitialState;
-}
-
-interface IInitialState {
-  loading: boolean;
-  showSlidbar: boolean;
-  cartItems: ICartItem[];
-  shippingAddress: {
-    fullName: string;
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
-  };
-  paymentMethod: string;
-  itemsPrice: string;
-  shippingPrice: number;
-  totalPrice: string;
-  taxPrice?: string;
-}
-
-interface ICartItem {
-  countInStock: number;
-  description: string;
-  id: string;
-  img: string;
-  name: string;
-  numReviews: number;
-  price: number;
-  qty: number;
-  rating: number;
-  quantity: number;
-}
-[];
 
 export default function PlaceOrderScreen() {
   // 어글리패턴
@@ -56,6 +21,7 @@ export default function PlaceOrderScreen() {
   //   loading,
   // }: IInitialState = useSelector((state) => state.cart);
 
+  // useSelector //
   const cartItems: ICartItem[] = useSelector(
     (state: IRootState) => state.cart.cartItems,
   );
@@ -72,6 +38,7 @@ export default function PlaceOrderScreen() {
     (state: IRootState) => state.cart.paymentMethod,
   );
   const loading = useSelector((state: IRootState) => state.cart.loading);
+  // useSelector //
 
   const router = useRouter();
 

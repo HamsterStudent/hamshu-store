@@ -1,26 +1,6 @@
+import { IInitialState } from "@/app/_types/cartType";
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-
-interface IInitialState {
-  loading: boolean;
-  showSlidbar: boolean;
-  cartItems: {
-    countInStock: number;
-    description: string;
-    id: string;
-    img: string;
-    name: string;
-    numReviews: number;
-    price: number;
-    qty: number;
-    rating: number;
-  }[];
-  shippingAddress: {};
-  paymentMethod: string;
-  itemsPrice: string;
-  shippingPrice: number;
-  totalPrice: string;
-}
 
 const initialState: IInitialState = Cookies.get("cart")
   ? { ...JSON.parse(Cookies.get("cart")!), loading: true, showSidebar: false }

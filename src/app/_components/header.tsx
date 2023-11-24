@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Hamburger from "public/assets/icon/hamburger.png";
 import SerchIcon from "public/assets/icon/icon_search.png";
 import { useSelector } from "react-redux";
+import { ICartItem, IRootState } from "../_types/cartType";
 
 const HeaderWrap = styled.section`
   width: 100%;
@@ -31,7 +32,12 @@ const HeaderWrap = styled.section`
 `;
 
 export default function Header() {
-  const { loading, cartItems } = useSelector((state) => state.cart);
+  // useSelector //
+  const loading = useSelector((state: IRootState) => state.cart.loading);
+  const cartItems: ICartItem[] = useSelector(
+    (state: IRootState) => state.cart.cartItems,
+  );
+  // useSelector //
   return (
     <HeaderWrap>
       <div className="imgWrap">

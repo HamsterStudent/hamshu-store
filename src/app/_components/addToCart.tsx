@@ -3,6 +3,7 @@ import { addToCart } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ICartItem, IRootState } from "../_types/cartType";
 
 interface IAddToCart {
   product: {
@@ -28,7 +29,12 @@ export default function AddToCart({
 }: IAddToCart) {
   const dispatch = useDispatch();
 
-  const { cartItems } = useSelector((state) => state.cart);
+  // useSelector //
+  const cartItems: ICartItem[] = useSelector(
+    (state: IRootState) => state.cart.cartItems,
+  );
+  // useSelector //
+
   const router = useRouter();
   const [qty, setQty] = useState(1);
 
