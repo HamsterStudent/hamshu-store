@@ -18,7 +18,6 @@ import Keyring from "./_components/_mainTap/keyring";
 import Best from "./_components/_mainTap/best";
 import { data } from "@/utils/data";
 import { hideLoading } from "@/redux/slices/cartSlice";
-import CartSideBar from "./_components/cartSideBar";
 
 const ContentsWrap = styled.section`
   border-radius: 20px 20px 0 0;
@@ -207,7 +206,6 @@ export default function Home() {
         null}
       </ContentsWrap>
       <Footer />
-      <CartSideBar />
     </>
   );
 }
