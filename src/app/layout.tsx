@@ -130,6 +130,7 @@ const AppInner = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+  position: relative;
   .mainImg {
     width: 100%;
     img {
