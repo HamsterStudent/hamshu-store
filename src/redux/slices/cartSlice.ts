@@ -6,14 +6,14 @@ const initialState: IInitialState = Cookies.get("cart")
   ? { ...JSON.parse(Cookies.get("cart")!), loading: true, showSidebar: false }
   : {
       loading: true,
-      showSlidbar: false,
+      showSidebar: false,
       cartItems: [],
       shippingAddress: {},
       paymentMethod: "",
     };
 
 const addDecimals = (num: number) => {
-  return (Math.round(num * 100) / 100).toFixed(2);
+  return Math.round(num).toFixed(0);
 };
 
 const cartSlice = createSlice({
@@ -40,6 +40,7 @@ const cartSlice = createSlice({
         // 세금
         // + Number(state.taxPrice),
       );
+      state.showSidebar = true;
       Cookies.set("cart", JSON.stringify(state));
     },
     removeFromCart: (state, action) => {
@@ -67,6 +68,9 @@ const cartSlice = createSlice({
     hideLoading: (state) => {
       state.loading = false;
     },
+    hideSideBar: (state) => {
+      state.showSidebar = false;
+    },
   },
 });
 
@@ -76,6 +80,7 @@ export const {
   saveShippingAddress,
   savePaymentMethod,
   hideLoading,
+  hideSideBar,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
