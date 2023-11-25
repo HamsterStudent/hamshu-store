@@ -6,11 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "server": "node server.js"
   },
   "dependencies": {
     "@portone/browser-sdk": "^0.0.3",
     "@reduxjs/toolkit": "^1.9.7",
+    "axios": "^1.6.2",
     "babel-plugin-styled-components": "^2.1.4",
     "js-cookie": "^3.0.5",
     "next": "14.0.1",
