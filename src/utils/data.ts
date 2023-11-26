@@ -4,7 +4,7 @@ export const data = {
       id: "1",
       name: "햄슈 에어팟",
       img: "/assets/prodimg/airpodcase.png",
-      price: 100,
+      price: 30,
       countInStock: 0,
       rating: 4.5,
       numReviews: 10,
@@ -13,7 +13,7 @@ export const data = {
     {
       id: "2",
       name: "햄슈 카드홀더",
-      price: 100,
+      price: 1362,
       img: "/assets/prodimg/cardholder_01.png",
       countInStock: 10,
       rating: 4.5,
@@ -23,7 +23,7 @@ export const data = {
     {
       id: "3",
       name: "햄슈 포토홀더",
-      price: 100,
+      price: 39,
       img: "/assets/prodimg/photoholder_01.png",
       countInStock: 10,
       rating: 4.5,
