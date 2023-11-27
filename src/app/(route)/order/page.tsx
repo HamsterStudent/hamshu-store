@@ -40,7 +40,7 @@ export default function PlaceOrderScreen() {
   const requestPayment = () => {
     if (!window.IMP) return;
     const { IMP } = window;
-    IMP.init(`${process.env.IMP_UID}`);
+    IMP.init(`${process.env.NEXT_PUBLIC_IMP_UID}`);
 
     const data: RequestPayParams = {
       pg: "html5_inicis", // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
@@ -62,37 +62,19 @@ export default function PlaceOrderScreen() {
   /* 콜백 함수 정의 */
   const callback = async (response: RequestPayResponse) => {
     const { success, error_msg, imp_uid, merchant_uid } = response;
-
     if (!success) {
       alert(`결제에 실패하였습니다. 사유: ${error_msg}`);
       return;
     }
-    const res = await axios({
-      url: "/api/verify",
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      data: { imp_uid: imp_uid, merchant_uid: merchant_uid },
-    });
-
-    console.log(res.status);
-
-    // if (success) {
-    //   axios({
-    //     url: "/api",
-    //     method: "post",
-    //     headers: { "Content-Type": "application/json" },
-    //     data: {
-    //       imp_uid: imp_uid,
-    //       merchant_uid: merchant_uid,
-    //     },
-    //   }).then((data) => {
-    //     // 서버 결제 API 성공시 로직
-    //     console.log("hamsters are ruling the world");
-    //   });
-    //   // router.push("/orderresult");
-    // } else {
-    //   alert(`결제 실패: ${error_msg}`);
-    // }
+    try {
+      const { data } = await axios.post("/api/verify", {
+        imp_uid: imp_uid,
+        merchant_uid: merchant_uid,
+      });
+      console.log(data); // 서버에서 받은 응답 데이터
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
   };
 
   return (
