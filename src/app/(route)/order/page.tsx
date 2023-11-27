@@ -1,6 +1,7 @@
 "use client";
 import CheckoutWizard from "@/app/_components/checkoutWizard";
 import { ICartItem, IRootState } from "@/app/_types/cartType";
+import axios from "axios";
 import { RequestPayParams, RequestPayResponse } from "iamport-typings";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,18 +10,6 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export default function PlaceOrderScreen() {
-  // 어글리패턴
-  // const {
-  //   cartItems,
-  //   itemsPrice,
-  //   shippingPrice,
-  //   totalPrice,
-  //   taxPrice,
-  //   shippingAddress,
-  //   paymentMethod,
-  //   loading,
-  // }: IInitialState = useSelector((state) => state.cart);
-
   // useSelector //
   const cartItems: ICartItem[] = useSelector(
     (state: IRootState) => state.cart.cartItems,
@@ -71,14 +60,39 @@ export default function PlaceOrderScreen() {
   };
 
   /* 콜백 함수 정의 */
-  const callback = (response: RequestPayResponse) => {
-    const { success, error_msg } = response;
+  const callback = async (response: RequestPayResponse) => {
+    const { success, error_msg, imp_uid, merchant_uid } = response;
 
-    if (success) {
-      router.push("/orderresult");
-    } else {
-      alert(`결제 실패: ${error_msg}`);
+    if (!success) {
+      alert(`결제에 실패하였습니다. 사유: ${error_msg}`);
+      return;
     }
+    const res = await axios({
+      url: "/api/verify",
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: { imp_uid: imp_uid, merchant_uid: merchant_uid },
+    });
+
+    console.log(res.status);
+
+    // if (success) {
+    //   axios({
+    //     url: "/api",
+    //     method: "post",
+    //     headers: { "Content-Type": "application/json" },
+    //     data: {
+    //       imp_uid: imp_uid,
+    //       merchant_uid: merchant_uid,
+    //     },
+    //   }).then((data) => {
+    //     // 서버 결제 API 성공시 로직
+    //     console.log("hamsters are ruling the world");
+    //   });
+    //   // router.push("/orderresult");
+    // } else {
+    //   alert(`결제 실패: ${error_msg}`);
+    // }
   };
 
   return (
