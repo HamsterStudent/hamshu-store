@@ -1,7 +1,9 @@
 "use client";
 import CheckoutWizard from "@/app/_components/checkoutWizard";
 import { ICartItem, IRootState } from "@/app/_types/cartType";
+import { db } from "@/firebase";
 import axios from "axios";
+import { addDoc, collection } from "firebase/firestore";
 import { RequestPayParams, RequestPayResponse } from "iamport-typings";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,6 +64,13 @@ export default function PlaceOrderScreen() {
   /* 콜백 함수 정의 */
   const callback = async (response: RequestPayResponse) => {
     const { success, error_msg, imp_uid, merchant_uid } = response;
+    const doc = await addDoc(collection(db, "payment"), {
+      imp_uid: imp_uid,
+      createdAt: Date.now(),
+      merchant_uid: merchant_uid,
+      dbAmount: +totalPrice,
+      status: "before",
+    });
     if (!success) {
       alert(`결제에 실패하였습니다. 사유: ${error_msg}`);
       return;
@@ -70,7 +79,9 @@ export default function PlaceOrderScreen() {
       const { data } = await axios.post("/api/verify", {
         imp_uid: imp_uid,
         merchant_uid: merchant_uid,
+        amount: +totalPrice,
       });
+
       console.log(data); // 서버에서 받은 응답 데이터
     } catch (error) {
       console.error("Error occurred:", error);

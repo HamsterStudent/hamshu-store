@@ -1,21 +1,24 @@
 import axios from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-
-var db = [
-  {
-    id: "mid_1701064725675",
-    amount: 3500,
-  },
-  {
-    id: "mid_1701067997135",
-    amount: 2000,
-  },
-];
-export async function POST(req: Request, res: Response) {
+import { NextApiResponse } from "next";
+import { db } from "@/firebase";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { RequestPayResponse } from "iamport-typings";
+type ResponseData = {
+  message: string;
+};
+export async function POST(req: Request, res: NextApiResponse) {
   const request = await req.json();
   const { imp_uid, merchant_uid } = request;
-
   try {
     // 액세스 토큰(access token) 발급 받기
     const getToken = await axios({
@@ -44,13 +47,40 @@ export async function POST(req: Request, res: Response) {
     const { amount, status } = paymentData;
 
     // DB에서 결제되어야 하는 금액 조회
-    // const order = await Orders.findById(paymentData.merchant_uid);
-    // const amountToBePaid = order.amount; // 결제 되어야 하는 금액
+    // Firestore 쿼리 수행
+    const q = query(collection(db, "payment"));
+    const qSnap = await getDocs(q);
+    let amountToBePaid;
+    let dbId;
+    for (let i = 0; i < qSnap.docs.length; i++) {
+      if (paymentData.merchant_uid === qSnap.docs[i].data().merchant_uid) {
+        console.log(i, qSnap.docs[i].data().merchant_uid);
+        dbId = qSnap.docs[i].data().id;
+        amountToBePaid = qSnap.docs[i].data().dbAmount;
+      }
+    }
+    // DB금액, 지불금액 검증
+    if (amount === amountToBePaid) {
+      console.log("hamster");
+      // await updateDoc(doc(db, "payment", dbId), { status: status });
+      throw { status: 400, message: "위조된 결제시도" };
+      // switch (status) {
+      //   case "paid": // 결제 완료
+      //     console.log(res);
+      //     res
+      //       .status(200)
+      //       .send({ status: "success", message: "일반 결제 성공" });
+      //     break;
+      // }
+    } else {
+      throw { status: 400, message: "위조된 결제시도" };
+    }
+  } catch (error) {
+    const errorMessage =
+      (error as { message: string }).message || "An error occurred";
+    const statusCode = (error as { status?: number }).status || 500;
 
-    console.log(merchant_uid, paymentData.merchant_uid);
-  } catch (e) {
-    request.status(400).send(e);
+    res.status(statusCode).send({ message: errorMessage });
+    return;
   }
-
-  return NextResponse.json({ message: "Hello World" });
 }
