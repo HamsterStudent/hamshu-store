@@ -39,7 +39,23 @@ export default function PlaceOrderScreen() {
     }
   }, [paymentMethod, router]);
 
-  const requestPayment = () => {
+  const paymentPreVerify = async () => {
+    try {
+      const { data } = await axios.post("/api/verify/preverify", {
+        merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
+        amount: +totalPrice, // 결제금액
+      });
+      requestPayment(data);
+    } catch (error) {
+      console.error("paymentPreVerify에러! : ", error);
+    }
+  };
+
+  const requestPayment = (preVerifyData: {
+    amount: number;
+    merchant_uid: string;
+    status: number;
+  }) => {
     if (!window.IMP) return;
     const { IMP } = window;
     IMP.init(`${process.env.NEXT_PUBLIC_IMP_UID}`);
@@ -47,10 +63,10 @@ export default function PlaceOrderScreen() {
     const data: RequestPayParams = {
       pg: "html5_inicis", // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
       pay_method: "card", // 결제수단
-      merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
-      amount: +totalPrice, // 결제금액
+      merchant_uid: preVerifyData.merchant_uid, // 주문번호
+      amount: preVerifyData.amount, // 결제금액
       name: `${cartItems[0].name} 외 ${cartItems.length}`, // 주문명
-      buyer_name: "홍길동", // 구매자 이름
+      buyer_name: `${shippingAddress.fullName}`, // 구매자 이름
       buyer_tel: "01012341234", // 구매자 전화번호
       buyer_email: "example@example.com", // 구매자 이메일
       buyer_addr: `${shippingAddress.fullName}${shippingAddress.address}${shippingAddress.city}${shippingAddress.postalCode}${shippingAddress.country}`, // 구매자 주소
@@ -64,13 +80,6 @@ export default function PlaceOrderScreen() {
   /* 콜백 함수 정의 */
   const callback = async (response: RequestPayResponse) => {
     const { success, error_msg, imp_uid, merchant_uid } = response;
-    const doc = await addDoc(collection(db, "payment"), {
-      imp_uid: imp_uid,
-      createdAt: Date.now(),
-      merchant_uid: merchant_uid,
-      dbAmount: +totalPrice,
-      status: "before",
-    });
     if (!success) {
       alert(`결제에 실패하였습니다. 사유: ${error_msg}`);
       return;
@@ -84,13 +93,14 @@ export default function PlaceOrderScreen() {
 
       console.log(data); // 서버에서 받은 응답 데이터
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.error("에러발생!!!! : ", error);
     }
   };
 
   return (
     <div>
       <CheckoutWizard activeStep={3} />
+
       <h1>Place Order</h1>
       {loading ? (
         <div>Loading</div>
@@ -160,7 +170,16 @@ export default function PlaceOrderScreen() {
                 <p>${totalPrice}</p>
               </li>
               <li>
-                <button onClick={() => requestPayment()}>Place Order</button>
+                {/* <button onClick={() => requestPayment()}>Place Order</button> */}
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    paymentPreVerify();
+                  }}
+                >
+                  hamster
+                </button>
               </li>
             </ul>
           </div>
