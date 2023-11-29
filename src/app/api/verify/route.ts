@@ -1,6 +1,6 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
-import { NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/firebase";
 import {
   collection,
@@ -12,13 +12,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { RequestPayResponse } from "iamport-typings";
-type ResponseData = {
-  message: string;
-};
-export async function POST(req: Request, res: NextApiResponse) {
+
+export async function POST(req: Request, res: Response) {
   const request = await req.json();
-  const { imp_uid, merchant_uid } = request;
+  const { imp_uid, merchant_uid, amount } = request;
+
   try {
     // 액세스 토큰(access token) 발급 받기
     const getToken = await axios({
@@ -61,26 +59,19 @@ export async function POST(req: Request, res: NextApiResponse) {
     }
     // DB금액, 지불금액 검증
     if (amount === amountToBePaid) {
-      console.log("hamster");
       // await updateDoc(doc(db, "payment", dbId), { status: status });
-      throw { status: 400, message: "위조된 결제시도" };
-      // switch (status) {
-      //   case "paid": // 결제 완료
-      //     console.log(res);
-      //     res
-      //       .status(200)
-      //       .send({ status: "success", message: "일반 결제 성공" });
-      //     break;
-      // }
+      switch (status) {
+        case "paid": // 결제 완료
+          return Response.json("일반 결제 성공", { status: 200 });
+      }
     } else {
-      throw { status: 400, message: "위조된 결제시도" };
+      throw Response.json("위조된 결제시도", {
+        status: 400,
+      });
     }
   } catch (error) {
-    const errorMessage =
-      (error as { message: string }).message || "An error occurred";
-    const statusCode = (error as { status?: number }).status || 500;
-
-    res.status(statusCode).send({ message: errorMessage });
-    return;
+    return Response.json("An error occurred", {
+      status: 500,
+    });
   }
 }
