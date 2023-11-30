@@ -72,7 +72,6 @@ export default function PlaceOrderScreen() {
       buyer_addr: `${shippingAddress.fullName}${shippingAddress.address}${shippingAddress.city}${shippingAddress.postalCode}${shippingAddress.country}`, // 구매자 주소
       buyer_postcode: shippingAddress.postalCode, // 구매자 우편번호
     };
-
     /* 결제 창 호출 */
     IMP.request_pay(data, callback);
   };
@@ -92,15 +91,16 @@ export default function PlaceOrderScreen() {
       });
 
       console.log(data); // 서버에서 받은 응답 데이터
+
+      router.push("/orderresult");
     } catch (error) {
-      console.error("에러발생!!!! : ", error);
+      console.error("err : ", error);
     }
   };
 
   return (
     <div>
       <CheckoutWizard activeStep={3} />
-
       <h1>Place Order</h1>
       {loading ? (
         <div>Loading</div>
