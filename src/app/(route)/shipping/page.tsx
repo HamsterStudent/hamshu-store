@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutWizard from "../../_components/checkoutWizard";
+import { IRootState } from "@/app/_types/cartType";
 
 interface IAddress {
   fullName: string;
@@ -15,15 +16,19 @@ interface IAddress {
 }
 
 export default function Shipping() {
+  // useSelector //
+  const shippingAddress = useSelector(
+    (state: IRootState) => state.cart.shippingAddress,
+  );
+  // useSelector //
   const {
     handleSubmit,
     register,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<IAddress>();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { shippingAddress } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (!shippingAddress) return;
@@ -106,7 +111,7 @@ export default function Shipping() {
               required: "Please enter country",
             })}
           />
-          {errors.country && <div>{errors.contry?.message?.toString()}</div>}
+          {errors.country && <div>{errors.country?.message?.toString()}</div>}
         </div>
         <div>
           <button>Next</button>
