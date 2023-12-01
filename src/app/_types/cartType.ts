@@ -8,6 +8,8 @@ export interface IInitialState {
   cartItems: ICartItem[];
   shippingAddress: {
     fullName: string;
+    number: number;
+    email: string;
     address: string;
     city: string;
     postalCode: string;

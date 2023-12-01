@@ -67,8 +67,8 @@ export default function PlaceOrderScreen() {
       amount: preVerifyData.amount, // 결제금액
       name: `${cartItems[0].name} 외 ${cartItems.length}`, // 주문명
       buyer_name: `${shippingAddress.fullName}`, // 구매자 이름
-      buyer_tel: "01012341234", // 구매자 전화번호
-      buyer_email: "example@example.com", // 구매자 이메일
+      buyer_tel: `${shippingAddress.number}`, // 구매자 전화번호
+      buyer_email: `${shippingAddress.email}`, // 구매자 이메일
       buyer_addr: `${shippingAddress.fullName}${shippingAddress.address}${shippingAddress.city}${shippingAddress.postalCode}${shippingAddress.country}`, // 구매자 주소
       buyer_postcode: shippingAddress.postalCode, // 구매자 우편번호
     };

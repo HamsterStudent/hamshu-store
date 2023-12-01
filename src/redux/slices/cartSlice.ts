@@ -61,6 +61,7 @@ const cartSlice = createSlice({
       state.shippingAddress = action.payload;
       Cookies.set("cart", JSON.stringify(state));
     },
+
     savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
       Cookies.set("cart", JSON.stringify(state));
