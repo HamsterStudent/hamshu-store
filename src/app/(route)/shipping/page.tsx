@@ -28,8 +28,8 @@ const ModalWrap = styled.div`
   z-index: 10;
   width: 100%;
   height: 100%;
-  background: #252525;
-  opacity: 0.5;
+  background: #2525257d;
+  z-index: 9;
 `;
 const Modal = styled.div`
   width: 95%;
