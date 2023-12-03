@@ -11,9 +11,8 @@ export interface IInitialState {
     number: number;
     email: string;
     address: string;
-    city: string;
+    detailAddress: string;
     postalCode: string;
-    country: string;
   };
   paymentMethod: string;
   itemsPrice: string;

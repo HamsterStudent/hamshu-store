@@ -7,16 +7,36 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckoutWizard from "../../_components/checkoutWizard";
 import { IRootState } from "@/app/_types/cartType";
 import Postcode from "./_components/postcode";
+import styled from "styled-components";
+import DaumPostcode from "react-daum-postcode";
 
 interface IAddress {
   fullName: string;
   number: number;
   email: string;
   address: string;
+  detailAddress: string;
   city: string;
   postalCode: string;
   country: string;
 }
+
+const ModalWrap = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: #252525;
+  opacity: 0.5;
+`;
+const Modal = styled.div`
+  width: 95%;
+  border-radius: 20px;
+  overflow: hidden;
+`;
 
 export default function Shipping() {
   // useSelector //
@@ -34,6 +54,14 @@ export default function Shipping() {
   const dispatch = useDispatch();
 
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [zipCode, setZipcode] = useState<string>("");
+  const [roadAddress, setRoadAddress] = useState<string>("");
+  const completeHandler = (data: any) => {
+    console.log(data);
+    setZipcode(data.zonecode); // 추가
+    setRoadAddress(data.roadAddress); // 추가
+    setShowAddressModal(false);
+  };
 
   useEffect(() => {
     if (!shippingAddress) return;
@@ -41,9 +69,8 @@ export default function Shipping() {
     setValue("number", shippingAddress.number);
     setValue("email", shippingAddress.email);
     setValue("address", shippingAddress.address);
-    setValue("city", shippingAddress.city);
+    setValue("detailAddress", shippingAddress.detailAddress);
     setValue("postalCode", shippingAddress.postalCode);
-    setValue("country", shippingAddress.country);
   }, [setValue, shippingAddress]);
 
   const submitHandler = ({
@@ -51,9 +78,8 @@ export default function Shipping() {
     number,
     email,
     address,
-    city,
+    detailAddress,
     postalCode,
-    country,
   }: IAddress) => {
     dispatch(
       saveShippingAddress({
@@ -61,9 +87,8 @@ export default function Shipping() {
         number,
         email,
         address,
-        city,
+        detailAddress,
         postalCode,
-        country,
       }),
     );
     router.push("/payment");
@@ -71,7 +96,13 @@ export default function Shipping() {
 
   return (
     <div>
-      {showAddressModal ? <Postcode /> : null}
+      {showAddressModal ? (
+        <ModalWrap>
+          <Modal>
+            <DaumPostcode onComplete={completeHandler} />
+          </Modal>
+        </ModalWrap>
+      ) : null}
       <CheckoutWizard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)}>
         <h1>배송 정보</h1>
@@ -92,7 +123,13 @@ export default function Shipping() {
             <input
               id="number"
               autoFocus
-              {...register("number", { required: "-없이 입력해 주세요" })}
+              {...register("number", {
+                required: "-없이 입력해 주세요",
+                pattern: {
+                  value: /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g,
+                  message: "숫자만 입력해 주세요",
+                },
+              })}
             />
             {errors.number && <div>{errors.number.message?.toString()}</div>}
           </li>
@@ -109,6 +146,7 @@ export default function Shipping() {
             <label htmlFor="address">배송지</label>
             <input
               id="address"
+              value={roadAddress}
               autoFocus
               {...register("address", {
                 required: "Please enter address",
@@ -129,20 +167,10 @@ export default function Shipping() {
             </button>
           </li>
           <li>
-            <label htmlFor="city">city</label>
-            <input
-              id="city"
-              autoFocus
-              {...register("city", {
-                required: "Please enter city",
-              })}
-            />
-            {errors.city && <div>{errors.city.message?.toString()}</div>}
-          </li>
-          <li>
-            <label htmlFor="postalCode">postalCode</label>
+            <label htmlFor="postalCode">우편번호</label>
             <input
               id="postalCode"
+              value={zipCode}
               autoFocus
               {...register("postalCode", {
                 required: "Please enter postalCode",
@@ -153,15 +181,15 @@ export default function Shipping() {
             )}
           </li>
           <li>
-            <label htmlFor="country">country</label>
+            <label htmlFor="detailAddress">상세주소</label>
             <input
-              id="country"
+              id="detailAddress"
               autoFocus
-              {...register("country", {
-                required: "Please enter country",
+              {...register("detailAddress", {
+                required: "Please enter detailAddress",
               })}
             />
-            {errors.country && <div>{errors.country?.message?.toString()}</div>}
+            {errors.city && <div>{errors.city.message?.toString()}</div>}
           </li>
         </ul>
 

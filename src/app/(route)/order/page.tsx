@@ -69,7 +69,7 @@ export default function PlaceOrderScreen() {
       buyer_name: `${shippingAddress.fullName}`, // 구매자 이름
       buyer_tel: `${shippingAddress.number}`, // 구매자 전화번호
       buyer_email: `${shippingAddress.email}`, // 구매자 이메일
-      buyer_addr: `${shippingAddress.fullName}${shippingAddress.address}${shippingAddress.city}${shippingAddress.postalCode}${shippingAddress.country}`, // 구매자 주소
+      buyer_addr: `${shippingAddress.address}${shippingAddress.postalCode}${shippingAddress.detailAddress}`, // 구매자 주소
       buyer_postcode: shippingAddress.postalCode, // 구매자 우편번호
     };
     /* 결제 창 호출 */
@@ -111,11 +111,13 @@ export default function PlaceOrderScreen() {
       ) : (
         <div>
           <div>
-            <h2>Shipping Address</h2>
+            <h2>배송정보</h2>
             <div>
-              {shippingAddress.fullName}, {shippingAddress.address},{" "}
-              {shippingAddress.city}, {shippingAddress.postalCode}, ,
-              {shippingAddress.country}
+              {shippingAddress.address}
+              {"("}
+              {shippingAddress.postalCode}
+              {")"}
+              {shippingAddress.detailAddress}
             </div>
             <div>
               <Link href="/shipping">Edit</Link>
