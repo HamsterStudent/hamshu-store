@@ -1,6 +1,8 @@
 "use client";
 import styled from "styled-components";
-import Header from "./_components/header";
+import { useDispatch } from "react-redux";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import NewImage from "public/assets/mainimg/main.png";
 import DishImage from "public/assets/mainimg/dish.png";
@@ -9,12 +11,13 @@ import PhotoCardImage from "public/assets/mainimg/photocard.png";
 import Footer from "./_components/footer";
 import ProdList from "./_components/prodList";
 import New from "./_components/_mainTap/new";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+
 import Dish from "./_components/_mainTap/dish";
 import Photocard from "./_components/_mainTap/photocard";
 import Keyring from "./_components/_mainTap/keyring";
 import Best from "./_components/_mainTap/best";
+import { data } from "@/utils/data";
+import { hideLoading } from "@/redux/slices/cartSlice";
 
 const ContentsWrap = styled.section`
   border-radius: 20px 20px 0 0;
@@ -47,30 +50,17 @@ export default function Home() {
   const params = useSearchParams();
   const [curname, setCurname] = useState("신상품");
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(hideLoading());
+  }, [dispatch]);
+
   console.log(params.get("limit"));
 
   const cateData = ["신상품", "식기", "포토카드", "키링", "베스트"];
 
-  const prodData = [
-    {
-      name: "햄슈 에어팟",
-      price: 5000,
-      img: "/assets/prodimg/airpodcase.png",
-    },
-    {
-      name: "햄슈 카드홀더",
-      price: 5000,
-      img: "/assets/prodimg/cardholder_01.png",
-    },
-    {
-      name: "햄슈 포토홀더",
-      price: 5000,
-      img: "/assets/prodimg/photoholder_01.png",
-    },
-    { name: "햄슈 접시", price: 5000, img: "/assets/prodimg/plate.png" },
-    { name: "햄슈 그릇", price: 5000, img: "/assets/prodimg/bowl.png" },
-    { name: "햄슈 인형", price: 5000, img: "/assets/prodimg/stuffedham.png" },
-  ];
+  const { bestProducts } = data;
 
   const dishData = [
     {
@@ -204,16 +194,16 @@ export default function Home() {
           })}
         </CategoryList>
         {curname === "신상품" ? (
-          <New data={prodData} />
-        ) : curname === "식기" ? (
-          <Dish data={dishData} />
-        ) : curname === "포토카드" ? (
-          <Photocard data={photoData} />
-        ) : curname === "키링" ? (
-          <Keyring data={keyringData} />
-        ) : curname === "베스트" ? (
-          <Best data={prodData} />
-        ) : null}
+          <New data={bestProducts} />
+        ) : // ) : curname === "식기" ? (
+        //   <Dish data={dishData} />
+        // ) : curname === "포토카드" ? (
+        //   <Photocard data={photoData} />
+        // ) : curname === "키링" ? (
+        //   <Keyring data={keyringData} />
+        // ) : curname === "베스트" ? (
+        //   <Best data={prodData} />
+        null}
       </ContentsWrap>
       <Footer />
     </>

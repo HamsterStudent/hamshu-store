@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import AddToCart from "./addToCart";
 
 const ProdListWrap = styled.div`
   margin: 10px 0;
@@ -64,7 +65,16 @@ const ProdDesc = styled.div`
 `;
 
 interface IProdList {
-  data: { name: string; img: string; price: number }[];
+  data: {
+    id: string;
+    name: string;
+    img?: string;
+    price: number;
+    countInStock: number;
+    rating: number;
+    numReviews: number;
+    description: string;
+  }[];
   title?: string;
 }
 
@@ -92,6 +102,12 @@ export default function ProdList({ data, title }: IProdList) {
                 <p>{x.price}$</p>
                 <p>{x.name}</p>
               </ProdDesc>
+              <AddToCart
+                showQty={false}
+                product={x}
+                increasePerClick={true}
+                redirect={false}
+              />
             </li>
           );
         })}

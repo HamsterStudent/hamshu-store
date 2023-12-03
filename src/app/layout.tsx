@@ -5,6 +5,8 @@ import StyledComponentsRegistry from "./lib/registry";
 import Head from "./head";
 import Header from "./_components/header";
 import { useIsMobile } from "./hooks/useIsMobile";
+import { StoreProvider } from "@/redux/storeProvider";
+import Script from "next/script";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -128,6 +130,7 @@ const AppInner = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+  position: relative;
   .mainImg {
     width: 100%;
     img {
@@ -148,36 +151,39 @@ export default function RootLayout({
   return (
     <html lang="kr">
       <body>
-        <StyledComponentsRegistry>
-          <ThemeProvider theme={defaultTheme}>
-            <GlobalStyle />
-            <Background>
-              {isMobile ? (
-                <AppInner>
-                  <Head />
-                  <Header />
-                  <div>{children}</div>
-                </AppInner>
-              ) : (
-                <AppWrap>
+        <StoreProvider>
+          <StyledComponentsRegistry>
+            <ThemeProvider theme={defaultTheme}>
+              <GlobalStyle />
+              <Background>
+                {isMobile ? (
                   <AppInner>
                     <Head />
                     <Header />
                     <div>{children}</div>
                   </AppInner>
-                </AppWrap>
-              )}
-              {/* <AppWrap>
+                ) : (
+                  <AppWrap>
+                    <AppInner>
+                      <Head />
+                      <Header />
+                      <div>{children}</div>
+                    </AppInner>
+                  </AppWrap>
+                )}
+                {/* <AppWrap>
                 <AppInner>
                   <Head />
                   <Header />
                   <div>{children}</div>
                 </AppInner>
               </AppWrap> */}
-            </Background>
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+              </Background>
+            </ThemeProvider>
+          </StyledComponentsRegistry>
+        </StoreProvider>
       </body>
+      <Script src="https://cdn.iamport.kr/v1/iamport.js" />
     </html>
   );
 }
