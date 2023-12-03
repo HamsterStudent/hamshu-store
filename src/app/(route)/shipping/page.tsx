@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutWizard from "../../_components/checkoutWizard";
 import { IRootState } from "@/app/_types/cartType";
-import Postcode from "./_components/postcode";
 import styled from "styled-components";
 import DaumPostcode from "react-daum-postcode";
 

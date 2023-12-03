@@ -1,4 +1,5 @@
 "use client";
+import { IRootState } from "@/app/_types/cartType";
 import {
   addToCart,
   hideSideBar,
@@ -13,8 +14,11 @@ import { useDispatch, useSelector } from "react-redux";
 export default function Cart() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { loading, cartItems, itemsPrice } = useSelector((state) => state.cart);
-
+  // useSelector //
+  const loading = useSelector((state: IRootState) => state.cart.loading);
+  const cartItems = useSelector((state: IRootState) => state.cart.cartItems);
+  const itemsPrice = useSelector((state: IRootState) => state.cart.itemsPrice);
+  // useSelector //
   useEffect(() => {
     dispatch(hideSideBar());
   }, []);
