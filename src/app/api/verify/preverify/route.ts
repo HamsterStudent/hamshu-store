@@ -37,7 +37,7 @@ export async function POST(req: Request, res: Response) {
     const data = getData.data.response;
     return Response.json({ ...data, status: 200 });
   } catch (error) {
-    return Response.json("결제를 취소합니다.", {
+    return Response.json("결제를 취소합니다", {
       status: 500,
     });
   }
