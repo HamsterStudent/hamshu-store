@@ -1,1 +1,1 @@
-## Hamshu store
+## Hamshu Store
