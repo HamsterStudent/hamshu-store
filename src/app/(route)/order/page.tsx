@@ -46,6 +46,7 @@ export default function PlaceOrderScreen() {
         amount: +totalPrice, // 결제금액
       });
       requestPayment(data);
+      console.log(data);
     } catch (error) {
       console.error("paymentPreVerify에러! : ", error);
     }
