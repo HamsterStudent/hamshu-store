@@ -10,6 +10,9 @@
     "server": "node server.js"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
+    "@apollo/server": "^4.9.5",
+    "@as-integrations/next": "^3.0.0",
     "@portone/browser-sdk": "^0.0.3",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
