@@ -14,7 +14,7 @@ export async function POST(req: Request, res: Response) {
   try {
     // 액세스 토큰(access token) 발급 받기
     const getToken = await axios({
-      url: "https://api.iamport.kr/users/getToken",
+      url: "https://static-api.iamport.kr/users/getToken",
       method: "post", // POST method
       headers: { "Content-Type": "application/json" },
       data: {
@@ -22,11 +22,12 @@ export async function POST(req: Request, res: Response) {
         imp_secret: `${process.env.API_SECRET}`, // REST API Secret
       },
     });
+    console.log(getToken);
 
     const { access_token } = getToken.data.response; // 인증 토큰
 
     const getData = await axios({
-      url: `https://api.iamport.kr/payments/prepare?_token=${access_token}`,
+      url: `https://static-api.iamport.kr/payments/prepare?_token=${access_token}`,
       method: "post",
       headers: { "Content-Type": "application/json" },
       data: {
@@ -37,6 +38,7 @@ export async function POST(req: Request, res: Response) {
     const data = getData.data.response;
     return Response.json({ ...data, status: 200 });
   } catch (error) {
+    console.log(error);
     return Response.json("결제를 취소합니다", {
       status: 500,
     });
