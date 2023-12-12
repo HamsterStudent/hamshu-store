@@ -44,9 +44,9 @@ export default function PlaceOrderScreen() {
       const { data } = await axios.post("/api/verify/preverify", {
         merchant_uid: `mid_${new Date().getTime()}`, // 주문번호
         amount: +totalPrice, // 결제금액
+        cartItems: cartItems, // 주문 정보
       });
       requestPayment(data);
-      console.log(data);
     } catch (error) {
       console.error("paymentPreVerify에러! : ", error);
     }
@@ -90,8 +90,6 @@ export default function PlaceOrderScreen() {
         merchant_uid: merchant_uid,
         amount: +totalPrice,
       });
-
-      console.log(data); // 서버에서 받은 응답 데이터
 
       router.push("/orderresult");
     } catch (error) {

@@ -63,7 +63,7 @@ let products = [
     id: "메이드 햄슈 카드홀더",
     name: "메이드 햄슈 카드홀더",
     tag: ["photo"],
-    price: 5000,
+    price: 1362,
     img: "/assets/prodimg/cardholder_01.png",
     countInStock: 0,
     rating: 4.5,
@@ -178,6 +178,7 @@ const typeDefs = gql`
     allProducts: [Product]
     product(id: ID!): Product
     productsCate(tag: [String]): [Product]
+    preVerifyProd(names: [String]): [Product]
   }
 
   type Product {
@@ -203,6 +204,9 @@ const resolvers = {
         product.tag.some((x) => tag.includes(x)),
       );
     },
+    preVerifyProd(__: any, { names }: { names: [String] }) {
+      return products.filter((product) => names.includes(product.name));
+    },
   },
 };
 
@@ -218,6 +222,5 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  console.log(request);
   return handler(request);
 }

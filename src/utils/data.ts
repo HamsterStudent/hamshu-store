@@ -12,7 +12,7 @@ export const data = {
     },
     {
       id: "2",
-      name: "햄슈 카드홀더",
+      name: "메이드 햄슈 카드홀더",
       price: 1362,
       img: "/assets/prodimg/cardholder_01.png",
       countInStock: 10,
@@ -22,7 +22,7 @@ export const data = {
     },
     {
       id: "3",
-      name: "햄슈 포토홀더",
+      name: "메이드 햄슈 포토홀더",
       price: 39,
       img: "/assets/prodimg/photoholder_01.png",
       countInStock: 10,
