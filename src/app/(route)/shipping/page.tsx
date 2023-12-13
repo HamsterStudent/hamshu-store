@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckoutWizard from "../../_components/checkoutWizard";
 import { IRootState } from "@/app/_types/cartType";
 import styled from "styled-components";
-import DaumPostcode from "react-daum-postcode";
+import DaumPostcode, { Address } from "react-daum-postcode";
 
 interface IAddress {
   fullName: string;
@@ -55,10 +55,10 @@ export default function Shipping() {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [zipCode, setZipcode] = useState<string>("");
   const [roadAddress, setRoadAddress] = useState<string>("");
-  const completeHandler = (data: any) => {
-    console.log(data);
-    setZipcode(data.zonecode); // 추가
-    setRoadAddress(data.roadAddress); // 추가
+
+  const completeHandler = (data: Address) => {
+    setZipcode(data.zonecode);
+    setRoadAddress(data.roadAddress);
     setShowAddressModal(false);
   };
 
