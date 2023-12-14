@@ -8,34 +8,16 @@ import CheckoutWizard from "../../_components/checkoutWizard";
 import { IRootState } from "@/app/_types/cartType";
 import styled from "styled-components";
 import DaumPostcode, { Address } from "react-daum-postcode";
+import { Dialog } from "@/app/_components/dialog";
 
 interface IAddress {
   fullName: string;
   number: number;
   email: string;
   address: string;
-  detailAddress: string;
-  city: string;
   postalCode: string;
-  country: string;
+  detailAddress: string;
 }
-
-const ModalWrap = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  background: #2525257d;
-  z-index: 9;
-`;
-const Modal = styled.div`
-  width: 95%;
-  border-radius: 20px;
-  overflow: hidden;
-`;
 
 export default function Shipping() {
   // useSelector //
@@ -48,6 +30,7 @@ export default function Shipping() {
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<IAddress>();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -62,46 +45,48 @@ export default function Shipping() {
     setShowAddressModal(false);
   };
 
-  useEffect(() => {
+  const fetchInitialAddress = (array: (keyof IAddress)[]) => {
     if (!shippingAddress) return;
-    setValue("fullName", shippingAddress.fullName);
-    setValue("number", shippingAddress.number);
-    setValue("email", shippingAddress.email);
-    setValue("address", shippingAddress.address);
-    setValue("detailAddress", shippingAddress.detailAddress);
-    setValue("postalCode", shippingAddress.postalCode);
-  }, [setValue, shippingAddress]);
+    array.map((x) => {
+      setValue(x, shippingAddress[x]);
+    });
+  };
 
-  const submitHandler = ({
-    fullName,
-    number,
-    email,
-    address,
-    detailAddress,
-    postalCode,
-  }: IAddress) => {
-    dispatch(
-      saveShippingAddress({
-        fullName,
-        number,
-        email,
-        address,
-        detailAddress,
-        postalCode,
-      }),
-    );
+  useEffect(() => {
+    fetchInitialAddress([
+      "fullName",
+      "number",
+      "email",
+      "address",
+      "postalCode",
+      "detailAddress",
+    ]);
+  }, [shippingAddress]);
+
+  const submitHandler = () => {
+    const formData = formDataFromUseForm();
+    saveShippingDataWithRedux(formData);
     router.push("/payment");
+  };
+
+  const saveShippingDataWithRedux = (data: IAddress) => {
+    dispatch(saveShippingAddress(data));
+  };
+
+  const formDataFromUseForm = (): IAddress => {
+    const {
+      fullName,
+      number,
+      email,
+      address,
+      postalCode,
+      detailAddress,
+    }: IAddress = getValues();
+    return { fullName, number, email, address, postalCode, detailAddress };
   };
 
   return (
     <div>
-      {showAddressModal ? (
-        <ModalWrap>
-          <Modal>
-            <DaumPostcode onComplete={completeHandler} />
-          </Modal>
-        </ModalWrap>
-      ) : null}
       <CheckoutWizard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)}>
         <h1>배송 정보</h1>
@@ -156,6 +141,13 @@ export default function Shipping() {
               })}
             />
             {errors.address && <div>{errors.address.message?.toString()}</div>}
+            <Dialog isOpen={showAddressModal}>
+              <Dialog.Dimmed />
+              <Dialog.Content>
+                <Dialog.Title>Hamster is Good</Dialog.Title>
+                <DaumPostcode onComplete={completeHandler} />
+              </Dialog.Content>
+            </Dialog>
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -188,7 +180,9 @@ export default function Shipping() {
                 required: "Please enter detailAddress",
               })}
             />
-            {errors.city && <div>{errors.city.message?.toString()}</div>}
+            {errors.detailAddress && (
+              <div>{errors.detailAddress.message?.toString()}</div>
+            )}
           </li>
         </ul>
 
