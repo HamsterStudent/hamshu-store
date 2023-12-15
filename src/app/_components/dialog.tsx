@@ -47,9 +47,8 @@ const DialogDimmed = () => {
 
 const DialogMain = ({ children, isOpen }: IDialogMainProps) => {
   const modalRoot = document.getElementById("appInner");
-
   if (!modalRoot) {
-    return null; // 모달을 렌더링할 요소가 없는 경우, null을 반환하거나 다른 처리를 수행합니다.
+    return null;
   }
 
   if (!isOpen) {

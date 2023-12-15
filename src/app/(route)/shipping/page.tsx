@@ -36,14 +36,33 @@ export default function Shipping() {
   const dispatch = useDispatch();
 
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [zipCode, setZipcode] = useState<string>("");
-  const [roadAddress, setRoadAddress] = useState<string>("");
+  const inputList: (keyof IAddress)[] = [
+    "fullName",
+    "number",
+    "email",
+    "address",
+    "postalCode",
+    "detailAddress",
+  ];
 
   const completeHandler = (data: Address) => {
-    setZipcode(data.zonecode);
-    setRoadAddress(data.roadAddress);
+    setValue("postalCode", data.zonecode);
+    setValue("address", data.roadAddress);
+    // setInputValueFromUseForm(["postalCode","address"], data)
     setShowAddressModal(false);
   };
+
+  // const setInputValueFromUseForm = (array: (keyof IAddress)[], getDataType: IAddress | Address) => {
+  //   if (getDataType === "initial") {
+  //     array.map((addressKey) => {
+  //       setValue(addressKey, shippingAddress[addressKey]);
+  //     });
+  //   }else if(getDataType === "address"){
+  //     array.map((x) => {
+  //       setValue(x, getDataType);
+  //     });
+  //   }
+  // };
 
   const fetchInitialAddress = (array: (keyof IAddress)[]) => {
     if (!shippingAddress) return;
@@ -53,14 +72,7 @@ export default function Shipping() {
   };
 
   useEffect(() => {
-    fetchInitialAddress([
-      "fullName",
-      "number",
-      "email",
-      "address",
-      "postalCode",
-      "detailAddress",
-    ]);
+    fetchInitialAddress(inputList);
   }, [shippingAddress]);
 
   const submitHandler = () => {
@@ -130,7 +142,6 @@ export default function Shipping() {
             <label htmlFor="address">배송지</label>
             <input
               id="address"
-              value={roadAddress}
               autoFocus
               {...register("address", {
                 required: "Please enter address",
@@ -144,7 +155,6 @@ export default function Shipping() {
             <Dialog isOpen={showAddressModal}>
               <Dialog.Dimmed />
               <Dialog.Content>
-                <Dialog.Title>Hamster is Good</Dialog.Title>
                 <DaumPostcode onComplete={completeHandler} />
               </Dialog.Content>
             </Dialog>
@@ -161,7 +171,6 @@ export default function Shipping() {
             <label htmlFor="postalCode">우편번호</label>
             <input
               id="postalCode"
-              value={zipCode}
               autoFocus
               {...register("postalCode", {
                 required: "Please enter postalCode",

@@ -164,13 +164,20 @@ export default function RootLayout({
                   </AppInner>
                 ) : (
                   <AppWrap>
-                    <AppInner id="appInner">
+                    <AppInner>
                       <Head />
                       <Header />
                       <div>{children}</div>
                     </AppInner>
                   </AppWrap>
                 )}
+                {/* <AppWrap>
+                <AppInner>
+                  <Head />
+                  <Header />
+                  <div>{children}</div>
+                </AppInner>
+              </AppWrap> */}
               </Background>
             </ThemeProvider>
           </StyledComponentsRegistry>
