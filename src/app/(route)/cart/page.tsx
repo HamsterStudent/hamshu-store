@@ -89,7 +89,7 @@ export default function Cart() {
             </div>
           </li>
           <li>
-            <button onClick={() => router.push("/shipping")}>
+            <button onClick={() => router.push("/order")}>
               Proceed to checkout
             </button>
           </li>
