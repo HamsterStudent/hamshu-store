@@ -4,7 +4,6 @@ import Shipping from "./_components/shipping";
 import Payment from "./_components/payment";
 import { ICartItem, IInitialState, IRootState } from "@/app/_types/cartType";
 import { useSelector } from "react-redux";
-import Cart from "./_components/cart";
 import OrderResult from "./_components/orderResult";
 import Order from "./_components/order";
 
