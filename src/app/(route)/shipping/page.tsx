@@ -46,23 +46,26 @@ export default function Shipping() {
   ];
 
   const completeHandler = (data: Address) => {
-    setValue("postalCode", data.zonecode);
-    setValue("address", data.roadAddress);
-    // setInputValueFromUseForm(["postalCode","address"], data)
+    // setValue("postalCode", data.zonecode);
+    // setValue("address", data.roadAddress);
+    setInputValueFromUseForm(["postalCode", "address"], data);
     setShowAddressModal(false);
   };
 
-  // const setInputValueFromUseForm = (array: (keyof IAddress)[], getDataType: IAddress | Address) => {
-  //   if (getDataType === "initial") {
-  //     array.map((addressKey) => {
-  //       setValue(addressKey, shippingAddress[addressKey]);
-  //     });
-  //   }else if(getDataType === "address"){
-  //     array.map((x) => {
-  //       setValue(x, getDataType);
-  //     });
-  //   }
-  // };
+  const setInputValueFromUseForm = (
+    array: (keyof IAddress)[],
+    data: IAddress | Address,
+  ) => {
+    if ("zonecode" in data) {
+      const { zonecode, roadAddress } = data;
+      setValue(array[0], zonecode);
+      setValue(array[1], roadAddress);
+    } else if ("fullName" in data) {
+      array.map((x) => {
+        setValue(x, data[x]);
+      });
+    }
+  };
 
   const fetchInitialAddress = (array: (keyof IAddress)[]) => {
     if (!shippingAddress) return;
@@ -72,7 +75,7 @@ export default function Shipping() {
   };
 
   useEffect(() => {
-    fetchInitialAddress(inputList);
+    setInputValueFromUseForm(inputList, shippingAddress);
   }, [shippingAddress]);
 
   const submitHandler = () => {
