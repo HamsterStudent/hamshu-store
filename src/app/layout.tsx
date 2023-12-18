@@ -157,14 +157,14 @@ export default function RootLayout({
               <GlobalStyle />
               <Background>
                 {isMobile ? (
-                  <AppInner>
+                  <AppInner id="appInner">
                     <Head />
                     <Header />
                     <div>{children}</div>
                   </AppInner>
                 ) : (
                   <AppWrap>
-                    <AppInner>
+                    <AppInner id="appInner">
                       <Head />
                       <Header />
                       <div>{children}</div>
