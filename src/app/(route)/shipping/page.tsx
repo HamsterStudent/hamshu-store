@@ -34,7 +34,6 @@ export default function Shipping() {
   } = useForm<IAddress>();
   const router = useRouter();
   const dispatch = useDispatch();
-
   const [showAddressModal, setShowAddressModal] = useState(false);
   const inputList: (keyof IAddress)[] = [
     "fullName",
@@ -45,9 +44,11 @@ export default function Shipping() {
     "detailAddress",
   ];
 
-  const completeHandler = (data: Address) => {
-    // setValue("postalCode", data.zonecode);
-    // setValue("address", data.roadAddress);
+  useEffect(() => {
+    setInputValueFromUseForm(inputList, shippingAddress);
+  }, [shippingAddress]);
+
+  const addressCompleteHandler = (data: Address) => {
     setInputValueFromUseForm(["postalCode", "address"], data);
     setShowAddressModal(false);
   };
@@ -67,27 +68,6 @@ export default function Shipping() {
     }
   };
 
-  const fetchInitialAddress = (array: (keyof IAddress)[]) => {
-    if (!shippingAddress) return;
-    array.map((x) => {
-      setValue(x, shippingAddress[x]);
-    });
-  };
-
-  useEffect(() => {
-    setInputValueFromUseForm(inputList, shippingAddress);
-  }, [shippingAddress]);
-
-  const submitHandler = () => {
-    const formData = formDataFromUseForm();
-    saveShippingDataWithRedux(formData);
-    router.push("/payment");
-  };
-
-  const saveShippingDataWithRedux = (data: IAddress) => {
-    dispatch(saveShippingAddress(data));
-  };
-
   const formDataFromUseForm = (): IAddress => {
     const {
       fullName,
@@ -98,6 +78,16 @@ export default function Shipping() {
       detailAddress,
     }: IAddress = getValues();
     return { fullName, number, email, address, postalCode, detailAddress };
+  };
+
+  const saveShippingDataWithRedux = (data: IAddress) => {
+    dispatch(saveShippingAddress(data));
+  };
+
+  const submitHandler = () => {
+    const formData = formDataFromUseForm();
+    saveShippingDataWithRedux(formData);
+    router.push("/payment");
   };
 
   return (
@@ -158,7 +148,7 @@ export default function Shipping() {
             <Dialog isOpen={showAddressModal}>
               <Dialog.Dimmed />
               <Dialog.Content>
-                <DaumPostcode onComplete={completeHandler} />
+                <DaumPostcode onComplete={addressCompleteHandler} />
               </Dialog.Content>
             </Dialog>
             <button
