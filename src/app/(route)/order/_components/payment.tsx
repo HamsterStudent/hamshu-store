@@ -4,14 +4,19 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import CheckoutWizard from "../../_components/checkoutWizard";
-import { IRootState } from "@/app/_types/cartType";
+import { IInitialState, IRootState } from "@/app/_types/cartType";
 
 interface IPaymentMethod {
   paymentMethod: string;
 }
 
-export default function Shipping() {
+export default function Payment({
+  onNext,
+  reduxData,
+}: {
+  onNext: () => void;
+  reduxData: IInitialState;
+}) {
   const {
     handleSubmit,
     register,
@@ -20,14 +25,8 @@ export default function Shipping() {
   } = useForm();
   const router = useRouter();
   const dispatch = useDispatch();
-  // useSelector //
-  const shippingAddress = useSelector(
-    (state: IRootState) => state.cart.shippingAddress,
-  );
-  const paymentMethod = useSelector(
-    (state: IRootState) => state.cart.paymentMethod,
-  );
-  // useSelector //
+  const { shippingAddress, paymentMethod } = reduxData;
+
   useEffect(() => {
     if (!shippingAddress.address) {
       return router.push("/shipping");
@@ -37,12 +36,11 @@ export default function Shipping() {
 
   const submitHandler = ({ paymentMethod }: any) => {
     dispatch(savePaymentMethod(paymentMethod));
-    router.push("/order");
+    onNext();
   };
 
   return (
     <div>
-      <CheckoutWizard activeStep={2} />
       <form onSubmit={handleSubmit(submitHandler)}>
         <h1>Payment Method</h1>
         {["PayPal", "Stripe", "CashOnDelivery"].map((payment) => (

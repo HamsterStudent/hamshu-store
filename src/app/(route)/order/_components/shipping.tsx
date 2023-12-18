@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import CheckoutWizard from "../../_components/checkoutWizard";
-import { IRootState } from "@/app/_types/cartType";
+import { IInitialState, IRootState } from "@/app/_types/cartType";
 import styled from "styled-components";
 import DaumPostcode, { Address } from "react-daum-postcode";
 import { Dialog } from "@/app/_components/dialog";
@@ -19,12 +18,14 @@ interface IAddress {
   detailAddress: string;
 }
 
-export default function Shipping() {
-  // useSelector //
-  const shippingAddress = useSelector(
-    (state: IRootState) => state.cart.shippingAddress,
-  );
-  // useSelector //
+export default function Shipping({
+  onNext,
+  reduxData,
+}: {
+  onNext: () => void;
+  reduxData: IInitialState;
+}) {
+  const { shippingAddress } = reduxData;
   const {
     handleSubmit,
     register,
@@ -87,12 +88,11 @@ export default function Shipping() {
   const submitHandler = () => {
     const formData = formDataFromUseForm();
     saveShippingDataWithRedux(formData);
-    router.push("/payment");
+    onNext();
   };
 
   return (
     <div>
-      <CheckoutWizard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)}>
         <h1>배송 정보</h1>
         <ul>
