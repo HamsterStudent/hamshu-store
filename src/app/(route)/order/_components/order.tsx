@@ -51,10 +51,6 @@ export default function Order({
     merchant_uid: string;
     status: number;
   }) => {
-    if (!window.IMP) return;
-    const { IMP } = window;
-    IMP.init(`${process.env.NEXT_PUBLIC_IMP_UID}`);
-
     const data: RequestPayParams = {
       pg: "html5_inicis", // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
       pay_method: "card", // 결제수단
@@ -67,8 +63,16 @@ export default function Order({
       buyer_addr: `${shippingAddress.address}${shippingAddress.postalCode}${shippingAddress.detailAddress}`, // 구매자 주소
       buyer_postcode: shippingAddress.postalCode, // 구매자 우편번호
     };
-    /* 결제 창 호출 */
-    IMP.request_pay(data, callback);
+
+    if (typeof window !== "undefined" && window.IMP) {
+      const { IMP } = window;
+      if (IMP) {
+        IMP.init(`${process.env.NEXT_PUBLIC_IMP_UID}`);
+        IMP.request_pay(data, callback);
+      }
+    } else {
+      return null;
+    }
   };
 
   /* 콜백 함수 정의 */
