@@ -7,6 +7,10 @@
     "_store": "Container",
     "_types": "Typescript",
     "_utils": "Utils",
+    "_shared": "Shared",
+    "_lib": "Lib",
+    "_style": "CSS",
+    "_redux": "Redux-actions",
     "(route)": "Routes"
   }
 }

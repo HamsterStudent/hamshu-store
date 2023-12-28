@@ -4,7 +4,7 @@ import {
   addToCart,
   hideSideBar,
   removeFromCart,
-} from "@/redux/slices/cartSlice";
+} from "@/_redux/slices/cartSlice";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -89,7 +89,7 @@ export default function Cart() {
             </div>
           </li>
           <li>
-            <button onClick={() => router.push("/shipping")}>
+            <button onClick={() => router.push("/order")}>
               Proceed to checkout
             </button>
           </li>

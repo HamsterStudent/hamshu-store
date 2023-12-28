@@ -1,108 +1,98 @@
 "use client";
-import { saveShippingAddress } from "@/redux/slices/cartSlice";
+import { saveShippingAddress } from "@/_redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import CheckoutWizard from "../../_components/checkoutWizard";
-import { IRootState } from "@/app/_types/cartType";
+import { IInitialState, IRootState } from "@/app/_types/cartType";
 import styled from "styled-components";
-import DaumPostcode from "react-daum-postcode";
+import DaumPostcode, { Address } from "react-daum-postcode";
+import { Dialog } from "@/app/_shared/dialog";
 
 interface IAddress {
   fullName: string;
   number: number;
   email: string;
   address: string;
-  detailAddress: string;
-  city: string;
   postalCode: string;
-  country: string;
+  detailAddress: string;
 }
 
-const ModalWrap = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  background: #2525257d;
-  z-index: 9;
-`;
-const Modal = styled.div`
-  width: 95%;
-  border-radius: 20px;
-  overflow: hidden;
-`;
-
-export default function Shipping() {
-  // useSelector //
-  const shippingAddress = useSelector(
-    (state: IRootState) => state.cart.shippingAddress,
-  );
-  // useSelector //
+export default function Shipping({
+  onNext,
+  reduxData,
+}: {
+  onNext: () => void;
+  reduxData: IInitialState;
+}) {
+  const { shippingAddress } = reduxData;
   const {
     handleSubmit,
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<IAddress>();
   const router = useRouter();
   const dispatch = useDispatch();
-
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [zipCode, setZipcode] = useState<string>("");
-  const [roadAddress, setRoadAddress] = useState<string>("");
-  const completeHandler = (data: any) => {
-    console.log(data);
-    setZipcode(data.zonecode); // 추가
-    setRoadAddress(data.roadAddress); // 추가
+  const inputList: (keyof IAddress)[] = [
+    "fullName",
+    "number",
+    "email",
+    "address",
+    "postalCode",
+    "detailAddress",
+  ];
+
+  useEffect(() => {
+    setInputValueFromUseForm(inputList, shippingAddress);
+  }, [shippingAddress]);
+
+  const addressCompleteHandler = (data: Address) => {
+    setInputValueFromUseForm(["postalCode", "address"], data);
     setShowAddressModal(false);
   };
 
-  useEffect(() => {
-    if (!shippingAddress) return;
-    setValue("fullName", shippingAddress.fullName);
-    setValue("number", shippingAddress.number);
-    setValue("email", shippingAddress.email);
-    setValue("address", shippingAddress.address);
-    setValue("detailAddress", shippingAddress.detailAddress);
-    setValue("postalCode", shippingAddress.postalCode);
-  }, [setValue, shippingAddress]);
+  const setInputValueFromUseForm = (
+    array: (keyof IAddress)[],
+    data: IAddress | Address,
+  ) => {
+    if ("zonecode" in data) {
+      const { zonecode, roadAddress } = data;
+      setValue(array[0], zonecode);
+      setValue(array[1], roadAddress);
+    } else if ("fullName" in data) {
+      array.map((x) => {
+        setValue(x, data[x]);
+      });
+    }
+  };
 
-  const submitHandler = ({
-    fullName,
-    number,
-    email,
-    address,
-    detailAddress,
-    postalCode,
-  }: IAddress) => {
-    dispatch(
-      saveShippingAddress({
-        fullName,
-        number,
-        email,
-        address,
-        detailAddress,
-        postalCode,
-      }),
-    );
-    router.push("/payment");
+  const formDataFromUseForm = (): IAddress => {
+    const {
+      fullName,
+      number,
+      email,
+      address,
+      postalCode,
+      detailAddress,
+    }: IAddress = getValues();
+    return { fullName, number, email, address, postalCode, detailAddress };
+  };
+
+  const saveShippingDataWithRedux = (data: IAddress) => {
+    dispatch(saveShippingAddress(data));
+  };
+
+  const submitHandler = () => {
+    const formData = formDataFromUseForm();
+    saveShippingDataWithRedux(formData);
+    onNext();
   };
 
   return (
     <div>
-      {showAddressModal ? (
-        <ModalWrap>
-          <Modal>
-            <DaumPostcode onComplete={completeHandler} />
-          </Modal>
-        </ModalWrap>
-      ) : null}
-      <CheckoutWizard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)}>
         <h1>배송 정보</h1>
         <ul>
@@ -145,7 +135,6 @@ export default function Shipping() {
             <label htmlFor="address">배송지</label>
             <input
               id="address"
-              value={roadAddress}
               autoFocus
               {...register("address", {
                 required: "Please enter address",
@@ -156,6 +145,12 @@ export default function Shipping() {
               })}
             />
             {errors.address && <div>{errors.address.message?.toString()}</div>}
+            <Dialog isOpen={showAddressModal}>
+              <Dialog.Dimmed />
+              <Dialog.Content>
+                <DaumPostcode onComplete={addressCompleteHandler} />
+              </Dialog.Content>
+            </Dialog>
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -169,7 +164,6 @@ export default function Shipping() {
             <label htmlFor="postalCode">우편번호</label>
             <input
               id="postalCode"
-              value={zipCode}
               autoFocus
               {...register("postalCode", {
                 required: "Please enter postalCode",
@@ -188,7 +182,9 @@ export default function Shipping() {
                 required: "Please enter detailAddress",
               })}
             />
-            {errors.city && <div>{errors.city.message?.toString()}</div>}
+            {errors.detailAddress && (
+              <div>{errors.detailAddress.message?.toString()}</div>
+            )}
           </li>
         </ul>
 

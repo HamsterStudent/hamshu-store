@@ -2,8 +2,8 @@ import Image from "next/image";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Info } from "./mainComponentsStyle";
-import ProdList from "./prodList";
+import { Info } from "../../_style/mainComponentsStyle";
+import ProdList from "../_shared/prodList";
 
 export default function MainTap({ dataName }: { dataName: string }) {
   const [prodData, setProdData] = useState([]);

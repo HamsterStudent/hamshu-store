@@ -4,7 +4,7 @@ export interface IRootState {
 
 export interface IInitialState {
   loading: boolean;
-  showSidebar: boolean;
+  showSidebar?: boolean;
   cartItems: ICartItem[];
   shippingAddress: {
     fullName: string;

@@ -5,7 +5,7 @@ import Hamburger from "public/assets/icon/hamburger.png";
 import SerchIcon from "public/assets/icon/icon_search.png";
 import { useSelector } from "react-redux";
 import { ICartItem, IRootState } from "../_types/cartType";
-import CartSideBar from "./cartSideBar";
+import CartSideBar from "../_components/cartSideBar";
 import { useState } from "react";
 
 const HeaderWrap = styled.section`
