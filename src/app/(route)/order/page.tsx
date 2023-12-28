@@ -6,6 +6,7 @@ import { ICartItem, IInitialState, IRootState } from "@/app/_types/cartType";
 import { useSelector } from "react-redux";
 import OrderResult from "./_components/orderResult";
 import Order from "./_components/order";
+import dynamic from "next/dynamic";
 
 export default function OrderProcess() {
   // useSelector //
@@ -38,13 +39,20 @@ export default function OrderProcess() {
     loading,
   };
 
+  const DynamicComponentWithNoSSR = dynamic(
+    () => import(`./_components/order`),
+    {
+      ssr: false,
+    },
+  );
+
   const [step, setStep] = useState<
     "Shipping Address" | "Payment Method" | "Place Order" | "Order Result"
   >("Shipping Address");
 
   return (
     <main>
-      {step === "Shipping Address" && (
+      {/* {step === "Shipping Address" && (
         <Shipping
           onNext={() => setStep("Payment Method")}
           reduxData={reduxData}
@@ -54,9 +62,12 @@ export default function OrderProcess() {
         <Payment onNext={() => setStep("Place Order")} reduxData={reduxData} />
       )}
       {step === "Place Order" && (
-        <Order onNext={() => setStep("Payment Method")} reduxData={reduxData} />
+        <DynamicComponentWithNoSSR
+          onNext={() => setStep("Payment Method")}
+          reduxData={reduxData}
+        />
       )}
-      {step === "Order Result" && <OrderResult />}
+      {step === "Order Result" && <OrderResult />} */}
     </main>
   );
 }
