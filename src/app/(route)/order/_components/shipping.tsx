@@ -1,5 +1,5 @@
 "use client";
-import { saveShippingAddress } from "@/redux/slices/cartSlice";
+import { saveShippingAddress } from "@/_redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IInitialState, IRootState } from "@/app/_types/cartType";
 import styled from "styled-components";
 import DaumPostcode, { Address } from "react-daum-postcode";
-import { Dialog } from "@/app/_components/dialog";
+import { Dialog } from "@/app/_shared/dialog";
 
 interface IAddress {
   fullName: string;

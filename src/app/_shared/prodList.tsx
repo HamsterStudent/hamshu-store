@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import AddToCart from "./addToCart";
+import AddToCart from "../_components/addToCart";
 
 const ProdListWrap = styled.div`
   margin: 10px 0;

@@ -22,7 +22,7 @@ export async function POST(req: Request, res: Response) {
         imp_secret: `${process.env.API_SECRET}`, // REST API Secret
       },
     });
-    console.log(getToken);
+    // console.log(getToken);
 
     const { access_token } = getToken.data.response; // 인증 토큰
 

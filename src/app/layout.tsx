@@ -1,11 +1,11 @@
 "use client";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
-import { defaultTheme } from "@/style/theme";
-import StyledComponentsRegistry from "./lib/registry";
-import Head from "./head";
-import Header from "./_components/header";
-import { useIsMobile } from "./hooks/useIsMobile";
-import { StoreProvider } from "@/redux/storeProvider";
+import { defaultTheme } from "@/_style/theme";
+import StyledComponentsRegistry from "./_lib/registry";
+import Head from "./_shared/head";
+import Header from "./_shared/header";
+import { useIsMobile } from "./_hooks/useIsMobile";
+import { StoreProvider } from "@/_redux/storeProvider";
 import Script from "next/script";
 
 const GlobalStyle = createGlobalStyle`
@@ -171,13 +171,6 @@ export default function RootLayout({
                     </AppInner>
                   </AppWrap>
                 )}
-                {/* <AppWrap>
-                <AppInner>
-                  <Head />
-                  <Header />
-                  <div>{children}</div>
-                </AppInner>
-              </AppWrap> */}
               </Background>
             </ThemeProvider>
           </StyledComponentsRegistry>

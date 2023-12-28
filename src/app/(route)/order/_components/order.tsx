@@ -41,7 +41,6 @@ export default function Order({
         amount: +totalPrice, // 결제금액
       });
       requestPayment(data);
-      console.log(data);
     } catch (error) {
       console.error("paymentPreVerify에러! : ", error);
     }
@@ -86,7 +85,7 @@ export default function Order({
         amount: +totalPrice,
       });
 
-      console.log(data); // 서버에서 받은 응답 데이터
+      // console.log(data); // 서버에서 받은 응답 데이터
 
       // router.push("/orderresult");
       onNext();

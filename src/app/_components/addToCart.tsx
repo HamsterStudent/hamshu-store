@@ -1,5 +1,5 @@
 "use client";
-import { addToCart } from "@/redux/slices/cartSlice";
+import { addToCart } from "@/_redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

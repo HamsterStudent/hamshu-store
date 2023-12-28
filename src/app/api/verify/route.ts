@@ -52,7 +52,7 @@ export async function POST(req: Request, res: Response) {
     let dbId;
     for (let i = 0; i < qSnap.docs.length; i++) {
       if (paymentData.merchant_uid === qSnap.docs[i].data().merchant_uid) {
-        console.log(i, qSnap.docs[i].data().merchant_uid);
+        // console.log(i, qSnap.docs[i].data().merchant_uid);
         dbId = qSnap.docs[i].data().id;
         amountToBePaid = qSnap.docs[i].data().dbAmount;
       }

@@ -8,11 +8,11 @@ import NewImage from "public/assets/mainimg/main.png";
 import DishImage from "public/assets/mainimg/dish.png";
 import KeyringImage from "public/assets/mainimg/keyring.png";
 import PhotoCardImage from "public/assets/mainimg/photocard.png";
-import Footer from "./_components/footer";
+import Footer from "./_shared/footer";
 import New from "./_components/_mainTap/new";
 
-import { data } from "@/utils/data";
-import { hideLoading } from "@/redux/slices/cartSlice";
+import { data } from "@/_utils/data";
+import { hideLoading } from "@/_redux/slices/cartSlice";
 import MainTap from "./_components/mainTap";
 
 const ContentsWrap = styled.section`

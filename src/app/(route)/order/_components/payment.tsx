@@ -1,5 +1,5 @@
 "use client";
-import { savePaymentMethod } from "@/redux/slices/cartSlice";
+import { savePaymentMethod } from "@/_redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";

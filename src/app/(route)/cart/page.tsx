@@ -4,7 +4,7 @@ import {
   addToCart,
   hideSideBar,
   removeFromCart,
-} from "@/redux/slices/cartSlice";
+} from "@/_redux/slices/cartSlice";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
