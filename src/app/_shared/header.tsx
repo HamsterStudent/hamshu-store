@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { ICartItem, IRootState } from "../_types/cartType";
 import CartSideBar from "../_components/cartSideBar";
 import { useState } from "react";
+import useShowSidebar from "../_hooks/useShowSidebar";
 
 const HeaderWrap = styled.section`
   width: 100%;
@@ -45,6 +46,7 @@ const CartWrap = styled.div`
 
 export default function Header() {
   const [isShow, setIsShow] = useState(true);
+  const { SidebarWrapper, openSidebar, closeSidebar } = useShowSidebar();
 
   // useSelector //
   const loading = useSelector((state: IRootState) => state.cart.loading);
@@ -58,12 +60,17 @@ export default function Header() {
   return (
     <HeaderWrap>
       <IconWrap>
-        <div className="imgWrap">
+        <div className="imgWrap" onClick={openSidebar}>
           <Image src={Hamburger} alt="hamburgermenu" />
         </div>
         <Link href="/">HAMSHUVER</Link>
       </IconWrap>
-
+      {
+        <SidebarWrapper>
+          <div onClick={closeSidebar}>close</div>
+          <Link href="/login">Login/register</Link>
+        </SidebarWrapper>
+      }
       <IconWrap>
         <CartWrap>
           <Link href="/cart">Cart</Link>
