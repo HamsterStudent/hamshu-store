@@ -52,14 +52,16 @@ const SidebarContents = ({ children }: ITitle) => {
 };
 
 const SidebarMain = ({ children, isOpen }: ISideberMain) => {
-  const modalRoot = document.getElementById("appInner");
-  if (!modalRoot) {
-    return null;
-  }
   if (!isOpen) {
     return null;
   }
-  return createPortal(<SidebarWrap>{children}</SidebarWrap>, modalRoot);
+  if (typeof document !== "undefined") {
+    const modalRoot = document.getElementById("appInner");
+    if (!modalRoot) {
+      return null;
+    }
+    return createPortal(<SidebarWrap>{children}</SidebarWrap>, modalRoot);
+  }
 };
 
 export const Sidebar = Object.assign(SidebarMain, {
