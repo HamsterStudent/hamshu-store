@@ -65,7 +65,12 @@ export default function Header() {
         </div>
         <Link href="/">HAMSHUVER</Link>
       </IconWrap>
-
+      {
+        <SidebarWrapper>
+          <div onClick={closeSidebar}>close</div>
+          <Link href="/login">Login/register</Link>
+        </SidebarWrapper>
+      }
       <IconWrap>
         <CartWrap>
           <Link href="/cart">Cart</Link>
