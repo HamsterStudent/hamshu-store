@@ -14,6 +14,7 @@ import New from "./_components/_mainTap/new";
 import { data } from "@/_utils/data";
 import { hideLoading } from "@/_redux/slices/cartSlice";
 import MainTap from "./_components/mainTap";
+import useShowSidebar from "./_hooks/useShowSidebar";
 
 const ContentsWrap = styled.section`
   border-radius: 20px 20px 0 0;
@@ -45,15 +46,14 @@ const CategoryList = styled.ul`
 export default function Home() {
   const params = useSearchParams();
   const [curname, setCurname] = useState("신상품");
-
   const dispatch = useDispatch();
+  const { SidebarWrapper, openSidebar, closeSidebar } = useShowSidebar();
 
   useEffect(() => {
     dispatch(hideLoading());
   }, [dispatch]);
 
   const cateData = ["신상품", "식기", "포토카드", "키링", "베스트"];
-
   const { bestProducts } = data;
 
   const onClick = (e: React.MouseEvent<HTMLLIElement>) => {
@@ -65,6 +65,7 @@ export default function Home() {
   };
   return (
     <>
+      {SidebarWrapper}
       <div className="mainImg">
         <Image
           src={
