@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import AddToCart from "../_components/addToCart";
+import Link from "next/link";
 
 const ProdListWrap = styled.div`
   margin: 10px 0;
@@ -94,20 +95,22 @@ export default function ProdList({ data, title }: IProdList) {
         {data.map((x) => {
           return (
             <li key={x.name}>
-              <div className="prodImg">
-                <div className="decoBorder"></div>
-                <img src={x.img} alt={x.name} />
-              </div>
-              <ProdDesc>
-                <p>{x.price}$</p>
-                <p>{x.name}</p>
-              </ProdDesc>
-              <AddToCart
-                showQty={false}
-                product={x}
-                increasePerClick={true}
-                redirect={false}
-              />
+              <Link href={`/detail/${x.id}`}>
+                <div className="prodImg">
+                  <div className="decoBorder"></div>
+                  <img src={x.img} alt={x.name} />
+                </div>
+                <ProdDesc>
+                  <p>{x.price}$</p>
+                  <p>{x.name}</p>
+                </ProdDesc>
+                <AddToCart
+                  showQty={false}
+                  product={x}
+                  increasePerClick={true}
+                  redirect={false}
+                />
+              </Link>
             </li>
           );
         })}
