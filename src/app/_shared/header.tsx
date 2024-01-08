@@ -8,6 +8,7 @@ import { ICartItem, IRootState } from "../_types/cartType";
 import CartSideBar from "../_components/cartSideBar";
 import { useState } from "react";
 import useShowSidebar from "../_hooks/useShowSidebar";
+import { useRouter } from "next/navigation";
 
 const HeaderWrap = styled.section`
   width: 100%;
@@ -47,7 +48,7 @@ const CartWrap = styled.div`
 export default function Header() {
   const [isShow, setIsShow] = useState(true);
   const { SidebarWrapper, openSidebar, closeSidebar } = useShowSidebar();
-
+  const router = useRouter();
   // useSelector //
   const loading = useSelector((state: IRootState) => state.cart.loading);
   const cartItems: ICartItem[] = useSelector(
@@ -57,6 +58,7 @@ export default function Header() {
     (state: IRootState) => state.cart.showSidebar,
   );
   // useSelector //
+
   return (
     <HeaderWrap>
       <IconWrap>
@@ -68,7 +70,14 @@ export default function Header() {
       {
         <SidebarWrapper>
           <div onClick={closeSidebar}>close</div>
-          <Link href="/login">Login/register</Link>
+          <div
+            onClick={() => {
+              closeSidebar();
+              router.push("/login");
+            }}
+          >
+            Login/register
+          </div>
         </SidebarWrapper>
       }
       <IconWrap>
