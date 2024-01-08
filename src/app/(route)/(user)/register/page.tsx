@@ -3,7 +3,6 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { FirebaseError } from "firebase/app";
 import { auth } from "@/firebase";
-import styled from "styled-components";
 import Link from "next/link";
 import {
   Error,
@@ -12,7 +11,7 @@ import {
   Switcher,
   Title,
   Wrapper,
-} from "@/_style/registerStyle";
+} from "../_style/registerStyle";
 
 export default function CreateAccount() {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,7 +66,7 @@ export default function CreateAccount() {
   };
   return (
     <Wrapper>
-      <Title>Join 🍔</Title>
+      <Title>🐹 Join 🐹</Title>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
@@ -100,7 +99,8 @@ export default function CreateAccount() {
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
-        Already have an account? <Link href="/login">Log in &rarr;</Link>
+        Already have an account? <br />
+        <Link href="/login">Log in &rarr;</Link>
       </Switcher>
     </Wrapper>
   );

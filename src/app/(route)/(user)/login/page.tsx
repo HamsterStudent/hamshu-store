@@ -1,13 +1,17 @@
 "use client";
-import { Error, Input, Switcher, Title } from "@/_style/registerStyle";
+import {
+  Error,
+  Input,
+  Switcher,
+  Title,
+  Wrapper,
+} from "../_style/registerStyle";
 import { auth } from "@/firebase";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,8 +51,8 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <Title>Log into 🍔</Title>
+    <Wrapper>
+      <Title>🐹 Login 🐹</Title>
       <form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
@@ -70,8 +74,9 @@ export default function Login() {
       </form>
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
-        Dont have an account? <Link href="/register">Create one &rarr;</Link>
+        Dont have an account? <br />
+        <Link href="/register">Create one &rarr;</Link>
       </Switcher>
-    </div>
+    </Wrapper>
   );
 }
