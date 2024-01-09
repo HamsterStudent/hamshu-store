@@ -1,4 +1,4 @@
-export interface IRootState {
+export interface ICartState {
   cart: IInitialState;
 }
 
@@ -34,3 +34,19 @@ export interface ICartItem {
   quantity: number;
 }
 [];
+
+export interface IAddToCart {
+  product: {
+    id: string;
+    name: string;
+    img?: string | undefined;
+    price: number;
+    countInStock: number;
+    rating: number;
+    numReviews: number;
+    description: string;
+  };
+  showQty: boolean;
+  redirect: boolean;
+  increasePerClick: boolean;
+}

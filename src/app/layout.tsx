@@ -2,9 +2,9 @@
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { defaultTheme } from "@/_style/theme";
 import StyledComponentsRegistry from "./_lib/registry";
-import Head from "./_shared/head";
-import Header from "./_shared/header";
-import { useIsMobile } from "./_hooks/useIsMobile";
+import Head from "./_shared/_components/head";
+import Header from "./_shared/_components/header";
+import { useIsMobile } from "./_shared/_hooks/useIsMobile";
 import { StoreProvider } from "@/_redux/storeProvider";
 import Script from "next/script";
 

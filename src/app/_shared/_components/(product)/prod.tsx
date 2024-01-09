@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import AddToCart from "../_components/addToCart";
 import Link from "next/link";
+import AddToCartBtn from "./addToCartBtn";
 
 const ProdListWrap = styled.div`
   margin: 10px 0;
@@ -79,7 +79,7 @@ interface IProdList {
   title?: string;
 }
 
-export default function ProdList({ data, title }: IProdList) {
+export default function Prod({ data, title }: IProdList) {
   return (
     <ProdListWrap>
       {title ? (
@@ -100,17 +100,17 @@ export default function ProdList({ data, title }: IProdList) {
                   <div className="decoBorder"></div>
                   <img src={x.img} alt={x.name} />
                 </div>
-                <ProdDesc>
-                  <p>{x.price}$</p>
-                  <p>{x.name}</p>
-                </ProdDesc>
-                <AddToCart
-                  showQty={false}
-                  product={x}
-                  increasePerClick={true}
-                  redirect={false}
-                />
               </Link>
+              <ProdDesc>
+                <p>{x.price}$</p>
+                <p>{x.name}</p>
+              </ProdDesc>
+              <AddToCartBtn
+                showQty={false}
+                product={x}
+                increasePerClick={true}
+                redirect={false}
+              />
             </li>
           );
         })}

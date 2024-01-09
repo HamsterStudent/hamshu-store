@@ -3,12 +3,11 @@ import Link from "next/link";
 import styled from "styled-components";
 import Hamburger from "public/assets/icon/hamburger.png";
 import SerchIcon from "public/assets/icon/icon_search.png";
-import { useSelector } from "react-redux";
-import { ICartItem, IRootState } from "../_types/cartType";
-import CartSideBar from "../_components/cartSideBar";
+import CartSideBar from "../../(route)/cart/_components/cartSideBar";
 import { useState } from "react";
 import useShowSidebar from "../_hooks/useShowSidebar";
 import { useRouter } from "next/navigation";
+import useCart from "../../(route)/cart/_hooks/useCart";
 
 const HeaderWrap = styled.section`
   width: 100%;
@@ -49,15 +48,8 @@ export default function Header() {
   const [isShow, setIsShow] = useState(true);
   const { SidebarWrapper, openSidebar, closeSidebar } = useShowSidebar();
   const router = useRouter();
-  // useSelector //
-  const loading = useSelector((state: IRootState) => state.cart.loading);
-  const cartItems: ICartItem[] = useSelector(
-    (state: IRootState) => state.cart.cartItems,
-  );
-  const showSidebar = useSelector(
-    (state: IRootState) => state.cart.showSidebar,
-  );
-  // useSelector //
+
+  const { loading, cartItems, showSidebar } = useCart().cartData;
 
   return (
     <HeaderWrap>

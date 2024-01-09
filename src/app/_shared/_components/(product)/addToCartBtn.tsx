@@ -1,44 +1,23 @@
 "use client";
-import { addToCart } from "@/_redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ICartItem, IRootState } from "../_types/cartType";
+import useCart from "../../../(route)/cart/_hooks/useCart";
+import { IAddToCart } from "../../../(route)/cart/_types/cartType";
 
-interface IAddToCart {
-  product: {
-    id: string;
-    name: string;
-    img?: string | undefined;
-    price: number;
-    countInStock: number;
-    rating: number;
-    numReviews: number;
-    description: string;
-  };
-  showQty: boolean;
-  redirect: boolean;
-  increasePerClick: boolean;
-}
-
-export default function AddToCart({
+export default function AddToCartBtn({
   product,
   showQty = true,
   redirect = false,
   increasePerClick = false,
 }: IAddToCart) {
-  const dispatch = useDispatch();
+  const { addToCartHandler } = useCart();
 
-  // useSelector //
-  const cartItems: ICartItem[] = useSelector(
-    (state: IRootState) => state.cart.cartItems,
-  );
-  // useSelector //
+  const { cartItems } = useCart().cartData;
 
   const router = useRouter();
   const [qty, setQty] = useState(1);
 
-  const addToCartHandler = () => {
+  const addToCart = () => {
     let newQty = qty;
     if (increasePerClick) {
       const existItem = cartItems.find((x) => x.id === product.id);
@@ -50,7 +29,7 @@ export default function AddToCart({
         }
       }
     }
-    dispatch(addToCart({ ...product, qty: newQty }));
+    addToCartHandler({ ...product }, newQty);
 
     if (redirect) router.push("/cart");
   };
@@ -76,7 +55,7 @@ export default function AddToCart({
       )}
       <div>
         {product.countInStock > 0 ? (
-          <button onClick={addToCartHandler}>Add to cart</button>
+          <button onClick={addToCart}>Add to cart</button>
         ) : (
           <button disabled>Out of stock</button>
         )}

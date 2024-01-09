@@ -1,14 +1,8 @@
-import {
-  addToCart,
-  hideSideBar,
-  removeFromCart,
-} from "@/_redux/slices/cartSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ICartItem, IRootState } from "../_types/cartType";
 import styled from "styled-components";
+import useCart from "../_hooks/useCart";
 
 const CartSideBarWrap = styled.div`
   position: absolute;
@@ -46,26 +40,9 @@ const InfoWrap = styled.div`
 const OptionWrap = styled.div``;
 
 export default function CartSideBar() {
-  // useSelector //
-  const loading = useSelector((state: IRootState) => state.cart.loading);
-  const cartItems: ICartItem[] = useSelector(
-    (state: IRootState) => state.cart.cartItems,
-  );
-  const itemsPrice = useSelector((state: IRootState) => state.cart.itemsPrice);
-  const showSidebar = useSelector(
-    (state: IRootState) => state.cart.showSidebar,
-  );
-  // useSelector //
-
-  const dispatch = useDispatch();
-
-  const addToCartHandler = (product: ICartItem, qty: number) => {
-    dispatch(addToCart({ ...product, qty }));
-  };
-
-  const removeFromCartHandler = (id: string) => {
-    dispatch(removeFromCart(id));
-  };
+  const { loading, cartItems, itemsPrice, showSidebar } = useCart().cartData;
+  const { addToCartHandler, removeFromCartHandler, hideSideBarHandler } =
+    useCart();
 
   return (
     <CartSideBarWrap>
@@ -114,17 +91,11 @@ export default function CartSideBar() {
             ))}
           </ItemList>
           <div>
-            <Link href="/cart">장바구니 바로가기</Link>
+            <Link href="/order">장바구니 바로가기</Link>
           </div>
         </div>
       )}
-      <div
-        onClick={() => {
-          dispatch(hideSideBar());
-        }}
-      >
-        닫기
-      </div>
+      <div onClick={hideSideBarHandler}>닫기</div>
     </CartSideBarWrap>
   );
 }

@@ -1,10 +1,9 @@
 "use client";
-import { savePaymentMethod } from "@/_redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { IInitialState, IRootState } from "@/app/_types/cartType";
+import { IInitialState } from "@/app/(route)/cart/_types/cartType";
+import useCart from "@/app/(route)/cart/_hooks/useCart";
 
 interface IPaymentMethod {
   paymentMethod: string;
@@ -12,10 +11,10 @@ interface IPaymentMethod {
 
 export default function Payment({
   onNext,
-  reduxData,
+  cartData,
 }: {
   onNext: () => void;
-  reduxData: IInitialState;
+  cartData: IInitialState;
 }) {
   const {
     handleSubmit,
@@ -24,8 +23,8 @@ export default function Payment({
     setValue,
   } = useForm();
   const router = useRouter();
-  const dispatch = useDispatch();
-  const { shippingAddress, paymentMethod } = reduxData;
+  const { savePaymentMethodHandler } = useCart();
+  const { shippingAddress, paymentMethod } = cartData;
 
   useEffect(() => {
     if (!shippingAddress.address) {
@@ -35,7 +34,7 @@ export default function Payment({
   }, [paymentMethod, router, setValue, shippingAddress]);
 
   const submitHandler = ({ paymentMethod }: any) => {
-    dispatch(savePaymentMethod(paymentMethod));
+    savePaymentMethodHandler(paymentMethod);
     onNext();
   };
 

@@ -1,35 +1,19 @@
 "use client";
-import { IRootState } from "@/app/_types/cartType";
-import {
-  addToCart,
-  hideSideBar,
-  removeFromCart,
-} from "@/_redux/slices/cartSlice";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import useCart from "@/app/(route)/cart/_hooks/useCart";
 
 export default function Cart() {
-  const dispatch = useDispatch();
   const router = useRouter();
-  // useSelector //
-  const loading = useSelector((state: IRootState) => state.cart.loading);
-  const cartItems = useSelector((state: IRootState) => state.cart.cartItems);
-  const itemsPrice = useSelector((state: IRootState) => state.cart.itemsPrice);
-  // useSelector //
+  const { loading, cartItems, itemsPrice } = useCart().cartData;
+  const { hideSideBarHandler, addToCartHandler, removeFromCartHandler } =
+    useCart();
+
   useEffect(() => {
-    dispatch(hideSideBar());
+    hideSideBarHandler;
   }, []);
-
-  const addToCartHandler = (product: any, qty: number) => {
-    dispatch(addToCart({ ...product, qty }));
-  };
-
-  const removeFromCartHandler = (id: string) => {
-    dispatch(removeFromCart(id));
-  };
 
   return (
     <div>

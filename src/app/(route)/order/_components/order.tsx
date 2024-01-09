@@ -1,19 +1,18 @@
 "use client";
-import { ICartItem, IInitialState, IRootState } from "@/app/_types/cartType";
+import React from "react";
+import { IInitialState } from "@/app/(route)/cart/_types/cartType";
 import axios from "axios";
 import { RequestPayParams, RequestPayResponse } from "iamport-typings";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 export default function Order({
   onNext,
-  reduxData,
+  cartData,
 }: {
   onNext: () => void;
-  reduxData: IInitialState;
+  cartData: IInitialState;
 }) {
   const {
     cartItems,
@@ -24,7 +23,7 @@ export default function Order({
     shippingAddress,
     paymentMethod,
     loading,
-  } = reduxData;
+  } = cartData;
 
   const router = useRouter();
 
@@ -90,7 +89,6 @@ export default function Order({
       });
 
       // console.log(data); // 서버에서 받은 응답 데이터
-
       // router.push("/orderresult");
       onNext();
     } catch (error) {

@@ -1,4 +1,4 @@
-import { IInitialState } from "@/app/_types/cartType";
+import { IInitialState } from "@/app/(route)/cart/_types/cartType";
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 

@@ -1,31 +1,20 @@
 "use client";
-import { saveShippingAddress } from "@/_redux/slices/cartSlice";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { IInitialState, IRootState } from "@/app/_types/cartType";
-import styled from "styled-components";
+import { IInitialState } from "@/app/(route)/cart/_types/cartType";
 import DaumPostcode, { Address } from "react-daum-postcode";
-import { Dialog } from "@/app/_shared/dialog";
-
-interface IAddress {
-  fullName: string;
-  number: number;
-  email: string;
-  address: string;
-  postalCode: string;
-  detailAddress: string;
-}
+import { Dialog } from "@/app/_shared/_components/dialog";
+import useCart from "@/app/(route)/cart/_hooks/useCart";
+import { IAddress } from "../_types/orderType";
 
 export default function Shipping({
   onNext,
-  reduxData,
+  cartData,
 }: {
   onNext: () => void;
-  reduxData: IInitialState;
+  cartData: IInitialState;
 }) {
-  const { shippingAddress } = reduxData;
+  const { shippingAddress } = cartData;
   const {
     handleSubmit,
     register,
@@ -33,8 +22,7 @@ export default function Shipping({
     setValue,
     getValues,
   } = useForm<IAddress>();
-  const router = useRouter();
-  const dispatch = useDispatch();
+  const { saveShippingAddressHandler } = useCart();
   const [showAddressModal, setShowAddressModal] = useState(false);
   const inputList: (keyof IAddress)[] = [
     "fullName",
@@ -82,7 +70,7 @@ export default function Shipping({
   };
 
   const saveShippingDataWithRedux = (data: IAddress) => {
-    dispatch(saveShippingAddress(data));
+    saveShippingAddressHandler(data);
   };
 
   const submitHandler = () => {
