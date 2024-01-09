@@ -8,13 +8,13 @@ import NewImage from "public/assets/mainimg/main.png";
 import DishImage from "public/assets/mainimg/dish.png";
 import KeyringImage from "public/assets/mainimg/keyring.png";
 import PhotoCardImage from "public/assets/mainimg/photocard.png";
-import Footer from "./_shared/footer";
-import New from "./_components/_mainTap/new";
+import Footer from "./_shared/_components/footer";
+import New from "./_components/(mainTap)/new";
 
 import { data } from "@/_utils/data";
 import { hideLoading } from "@/_redux/slices/cartSlice";
-import MainTap from "./_components/mainTap";
-import useShowSidebar from "./_hooks/useShowSidebar";
+import useShowSidebar from "./_shared/_hooks/useShowSidebar";
+import ProdList from "./_shared/_components/(product)/prodList";
 
 const ContentsWrap = styled.section`
   border-radius: 20px 20px 0 0;
@@ -106,13 +106,13 @@ export default function Home() {
         {curname === "신상품" ? (
           <New data={bestProducts} />
         ) : curname === "식기" ? (
-          <MainTap dataName={"dish"} />
+          <ProdList dataName={"dish"} />
         ) : curname === "포토카드" ? (
-          <MainTap dataName={"photo"} />
+          <ProdList dataName={"photo"} />
         ) : curname === "키링" ? (
-          <MainTap dataName={"keyring"} />
+          <ProdList dataName={"keyring"} />
         ) : curname === "베스트" ? (
-          <MainTap dataName={"dish"} />
+          <ProdList dataName={"dish"} />
         ) : null}
       </ContentsWrap>
       <Footer />

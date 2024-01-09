@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { ReactNode, useState } from "react";
 import styled from "styled-components";
-import { Sidebar } from "../_shared/sidebar";
+import { Sidebar } from "../_components/sidebar";
 
 interface ISidebar {
   children: ReactNode;

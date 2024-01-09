@@ -2,10 +2,10 @@ import Image from "next/image";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Info } from "../../_style/mainComponentsStyle";
-import ProdList from "../_shared/prodList";
+import { Info } from "@/_style/mainComponentsStyle";
+import Prod from "./prod";
 
-export default function MainTap({ dataName }: { dataName: string }) {
+export default function ProdList({ dataName }: { dataName: string }) {
   const [prodData, setProdData] = useState([]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function MainTap({ dataName }: { dataName: string }) {
         www.햄슈그릇에 먹으면 건강해지고 더 맛있어집니다. 진짜임.co.kr
       </Info>
 
-      <ProdList data={prodData} />
+      <Prod data={prodData} />
     </>
   );
 }
