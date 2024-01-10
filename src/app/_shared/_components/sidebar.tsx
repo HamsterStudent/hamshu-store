@@ -1,18 +1,27 @@
 import Link from "next/link";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const Title = styled.h1`
   font-family: "UhBeeSe_hyun";
 `;
-
-const Contents = styled.div`
-  width: 80%;
-  height: 100%;
-  background-color: #fff;
+const slide = keyframes`
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
 `;
-
+const dimmedOpacity = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 const SidebarWrap = styled.section`
   position: absolute;
   top: 0;
@@ -23,6 +32,15 @@ const SidebarWrap = styled.section`
   width: 100%;
   height: 100%;
   z-index: 100;
+  .openAni {
+    animation: ${slide} 0.3s ease-in-out;
+  }
+`;
+
+const Contents = styled.div`
+  width: 80%;
+  height: 100%;
+  background-color: #fff;
 `;
 
 const Dimmed = styled.div`
@@ -30,6 +48,7 @@ const Dimmed = styled.div`
   height: 100%;
   position: absolute;
   background: #2525257d;
+  animation: ${dimmedOpacity} 0.3s ease-in-out;
 `;
 
 interface ISideberMain {
@@ -48,7 +67,7 @@ const SidebarTitle = ({ children }: ITitle) => {
   return <Title>{children}</Title>;
 };
 const SidebarContents = ({ children }: ITitle) => {
-  return <Contents>{children}</Contents>;
+  return <Contents className="openAni">{children}</Contents>;
 };
 
 const SidebarMain = ({ children, isOpen }: ISideberMain) => {
